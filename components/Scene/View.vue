@@ -10,8 +10,14 @@
 
 		<a-sky :src="`${config.public.baseURL}stars.jpg`" radius="1200" />
 
-		<a-entity v-if="selectedFloor === -1" rotation="-0 0 0" position="-5 12 10">
-			<a-camera :look-controls-enabled="false" near="1" fov="60" />
+		<a-entity rotation="-30 0 0" position="-5 12 10">
+			<a-camera
+				:key="selectedFloor"
+				:active="selectedFloor === -1"
+				:look-controls-enabled="false"
+				near="1"
+				fov="60"
+			/>
 		</a-entity>
 
 		<a-entity
@@ -26,8 +32,10 @@
 		>
 			<a-entity rotation="-90 0 0" position="6 10 -5">
 				<a-camera
-					v-if="selectedFloor === i"
+					:key="selectedFloor"
+					:active="selectedFloor === i"
 					:look-controls-enabled="false"
+					near="1"
 					fov="90"
 				/>
 			</a-entity>
@@ -37,6 +45,7 @@
 
 <script setup lang="ts">
 import { useSceneManager } from "@/stores/scene-manager";
+import { storeToRefs } from "pinia";
 const sceneManager = useSceneManager();
 const { hub, selectedFloor } = storeToRefs(sceneManager);
 const config = useRuntimeConfig();

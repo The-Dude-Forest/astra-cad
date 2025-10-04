@@ -13,7 +13,7 @@ onMounted(() => (key.value = 1));
 <template>
 	<ResizablePanelGroup direction="vertical">
 		<ResizablePanel :default-size="75" :min-size="30">
-			<div class="aspect-square">
+			<div class="aspect-[4/3]">
 				<SceneView :key="key" />
 			</div>
 		</ResizablePanel>
