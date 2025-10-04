@@ -1,0 +1,25 @@
+<script setup lang="ts">
+import {
+	ResizablePanelGroup,
+	ResizablePanel,
+	ResizableHandle,
+} from '@/components/ui/resizable';
+</script>
+
+<template>
+	<ResizablePanelGroup direction="vertical">
+		<ResizablePanel :default-size="30" :min-size="15" :max-size="50">
+			<div class="h-full w-full bg-background p-4">
+				<h2 class="text-lg font-semibold mb-2">Mission Information</h2>
+			</div>
+		</ResizablePanel>
+
+		<ResizableHandle :with-handle="true" />
+
+		<ResizablePanel :default-size="70" :min-size="0" :collapsible="true">
+			<div class="h-full w-full bg-background p-4">
+				<h2 class="text-lg font-semibold mb-2">AI Chat</h2>
+			</div>
+		</ResizablePanel>
+	</ResizablePanelGroup>
+</template>
