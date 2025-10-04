@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Layers, Package, Plus, Trash2 } from "lucide-vue-next";
+import Textarea from "./ui/textarea/Textarea.vue";
 
 const sceneManager = useSceneManager();
 
@@ -184,6 +185,17 @@ function removeFloor(floorLevel: number) {
 													<Input v-model="item.desc" disabled />
 												</div>
 
+												<div class="grid grid-cols-2 gap-2">
+													<div class="space-y-2">
+														<Label>Volume</Label>
+														<Input v-model="item.volume" disabled />
+													</div>
+													<div class="space-y-2">
+														<Label>Mass</Label>
+														<Input v-model="item.mass" disabled />
+													</div>
+												</div>
+
 												<div class="space-y-2">
 													<Label>Position (X, Y, Z)</Label>
 													<div class="grid grid-cols-3 gap-2">
@@ -216,7 +228,11 @@ function removeFloor(floorLevel: number) {
 
 												<div class="space-y-2">
 													<Label>Notes</Label>
-													<Input v-model="item.notes" disabled />
+													<Textarea
+														v-model="item.notes"
+														class="resize-none"
+														disabled
+													/>
 												</div>
 											</div>
 											<Button

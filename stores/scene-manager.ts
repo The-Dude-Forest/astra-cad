@@ -80,6 +80,13 @@ export const useSceneManager = defineStore(
 				y: 0,
 				z: 3,
 				type: "command",
+				mass: 85,
+				noise: 45,
+				orientation: 0,
+				power: 0.8,
+				volume: 1.2,
+				notes:
+					"Primary control interface. Should be centrally located in command module with clear sightlines. Requires stable power supply.",
 			},
 			{
 				title: "Workstation",
@@ -90,6 +97,13 @@ export const useSceneManager = defineStore(
 				y: 0,
 				z: 2,
 				type: "command",
+				mass: 65,
+				noise: 42,
+				orientation: 0,
+				power: 0.6,
+				volume: 0.9,
+				notes:
+					"Secondary workstation for parallel operations. Should be positioned near command console for crew coordination.",
 			},
 			{
 				title: "Main Display Screen",
@@ -100,6 +114,13 @@ export const useSceneManager = defineStore(
 				y: 1.5,
 				z: 0,
 				type: "command",
+				mass: 25,
+				noise: 35,
+				orientation: 0,
+				power: 0.3,
+				volume: 0.4,
+				notes:
+					"Wall-mounted display. Should be visible from command consoles. Consider glare from other light sources.",
 			},
 			{
 				title: "Communication Panel",
@@ -110,6 +131,13 @@ export const useSceneManager = defineStore(
 				y: 1.2,
 				z: 2,
 				type: "command",
+				mass: 18,
+				noise: 38,
+				orientation: 0,
+				power: 0.4,
+				volume: 0.3,
+				notes:
+					"Communications hub for Earth and EVA contact. Needs clear signal path, avoid placement near heavy machinery interference.",
 			},
 			{
 				title: "Server Rack",
@@ -120,6 +148,13 @@ export const useSceneManager = defineStore(
 				y: 0,
 				z: -2,
 				type: "command",
+				mass: 120,
+				noise: 58,
+				orientation: 0,
+				power: 2.5,
+				volume: 1.8,
+				notes:
+					"High power consumption and heat generation. Should be near thermal control systems. Noise may affect nearby crew quarters.",
 			},
 			{
 				title: "Anchored Chair",
@@ -130,6 +165,13 @@ export const useSceneManager = defineStore(
 				y: 0,
 				z: 2,
 				type: "command",
+				mass: 15,
+				noise: 0,
+				orientation: 0,
+				power: 0,
+				volume: 0.5,
+				notes:
+					"Ergonomic seating for extended console operation. Position for optimal reach to command console and workstation.",
 			},
 
 			// 🛏️ CREW QUARTERS
@@ -142,6 +184,13 @@ export const useSceneManager = defineStore(
 				y: 0,
 				z: 4,
 				type: "crew",
+				mass: 45,
+				noise: 0,
+				orientation: 0,
+				power: 0.05,
+				volume: 2.5,
+				notes:
+					"Crew rest area requiring acoustic isolation from noisy systems. Should be away from high-traffic zones and machinery.",
 			},
 			{
 				title: "Storage Locker",
@@ -152,6 +201,13 @@ export const useSceneManager = defineStore(
 				y: 0,
 				z: 4,
 				type: "crew",
+				mass: 30,
+				noise: 0,
+				orientation: 0,
+				power: 0,
+				volume: 0.8,
+				notes:
+					"Personal storage for each crew member. Should be adjacent to sleeping pods for easy access.",
 			},
 			{
 				title: "Reading Light",
@@ -162,6 +218,13 @@ export const useSceneManager = defineStore(
 				y: 1.5,
 				z: 4,
 				type: "crew",
+				mass: 2,
+				noise: 0,
+				orientation: 0,
+				power: 0.02,
+				volume: 0.05,
+				notes:
+					"Low-power individual lighting. Minimal power draw, allows personal illumination without disturbing others.",
 			},
 
 			// 🌬️ LIFE SUPPORT & UTILITY BAY
@@ -174,6 +237,13 @@ export const useSceneManager = defineStore(
 				y: 0,
 				z: -2,
 				type: "life-support",
+				mass: 180,
+				noise: 65,
+				orientation: 0,
+				power: 3.2,
+				volume: 2.8,
+				notes:
+					"Critical life support system with high power demand. Noise level requires distance from crew quarters. Should be redundant.",
 			},
 			{
 				title: "CO₂ Scrubber",
@@ -184,6 +254,13 @@ export const useSceneManager = defineStore(
 				y: 0,
 				z: -3,
 				type: "life-support",
+				mass: 150,
+				noise: 62,
+				orientation: 0,
+				power: 2.8,
+				volume: 2.4,
+				notes:
+					"Essential for air quality. Continuous operation required. Fan noise impacts nearby areas. Needs regular maintenance access.",
 			},
 			{
 				title: "Water Recycler",
@@ -194,6 +271,13 @@ export const useSceneManager = defineStore(
 				y: 0,
 				z: -2,
 				type: "life-support",
+				mass: 220,
+				noise: 58,
+				orientation: 0,
+				power: 2.5,
+				volume: 3.5,
+				notes:
+					"Heavy system with significant water mass. Should be near galley and medical facilities. Requires drainage and plumbing access.",
 			},
 			{
 				title: "Thermal Control Unit",
@@ -204,6 +288,13 @@ export const useSceneManager = defineStore(
 				y: 0,
 				z: -4,
 				type: "life-support",
+				mass: 195,
+				noise: 60,
+				orientation: 0,
+				power: 3.5,
+				volume: 2.6,
+				notes:
+					"Manages heat from equipment and environmental extremes. High power consumption. Should be central to distribute conditioned air.",
 			},
 			{
 				title: "Power Battery",
@@ -214,6 +305,13 @@ export const useSceneManager = defineStore(
 				y: 0,
 				z: -3,
 				type: "utility",
+				mass: 450,
+				noise: 35,
+				orientation: 0,
+				power: -5.0,
+				volume: 1.5,
+				notes:
+					"Heavy energy storage unit. Acts as power buffer during peak demand. Negative power indicates energy storage capacity. Should be protected and accessible.",
 			},
 			{
 				title: "System Control Panel",
@@ -224,6 +322,13 @@ export const useSceneManager = defineStore(
 				y: 1.5,
 				z: -2,
 				type: "life-support",
+				mass: 12,
+				noise: 32,
+				orientation: 0,
+				power: 0.15,
+				volume: 0.2,
+				notes:
+					"Monitoring station for life support vitals. Should be visible from command console and accessible from utility bay.",
 			},
 
 			// 🚪 AIRLOCK / EVA PREP AREA
@@ -236,6 +341,13 @@ export const useSceneManager = defineStore(
 				y: 0,
 				z: 1,
 				type: "airlock",
+				mass: 850,
+				noise: 75,
+				orientation: 0,
+				power: 1.8,
+				volume: 8.0,
+				notes:
+					"Primary entry/exit point with dual pressure doors. High noise during depressurization. Must be isolated from main habitat during EVA operations.",
 			},
 			{
 				title: "EVA Suit Rack",
@@ -246,6 +358,13 @@ export const useSceneManager = defineStore(
 				y: 0,
 				z: 2,
 				type: "airlock",
+				mass: 95,
+				noise: 0,
+				orientation: 0,
+				power: 0.1,
+				volume: 1.2,
+				notes:
+					"Stores EVA suits with climate control. Should be immediately adjacent to airlock for rapid access during emergencies.",
 			},
 			{
 				title: "Oxygen Refill Port",
@@ -256,6 +375,13 @@ export const useSceneManager = defineStore(
 				y: 1,
 				z: 2,
 				type: "airlock",
+				mass: 25,
+				noise: 48,
+				orientation: 0,
+				power: 0.4,
+				volume: 0.3,
+				notes:
+					"High-pressure oxygen connection. Must be near main oxygen supply line. Safety concern - keep away from ignition sources.",
 			},
 			{
 				title: "Tool Rack",
@@ -266,6 +392,13 @@ export const useSceneManager = defineStore(
 				y: 1,
 				z: 0,
 				type: "airlock",
+				mass: 35,
+				noise: 0,
+				orientation: 0,
+				power: 0,
+				volume: 0.4,
+				notes:
+					"EVA equipment storage. Easy access required for pre-EVA preparation. Organize by mission priority.",
 			},
 			{
 				title: "Decontamination System",
@@ -276,6 +409,13 @@ export const useSceneManager = defineStore(
 				y: 0,
 				z: 1,
 				type: "airlock",
+				mass: 78,
+				noise: 55,
+				orientation: 0,
+				power: 1.2,
+				volume: 1.8,
+				notes:
+					"Critical for preventing abrasive lunar dust from entering habitat. Should be in airlock chamber or immediately adjacent transition area.",
 			},
 
 			// 🏥 MEDICAL / EMERGENCY BAY
@@ -288,6 +428,13 @@ export const useSceneManager = defineStore(
 				y: 0,
 				z: 0,
 				type: "medical",
+				mass: 55,
+				noise: 0,
+				orientation: 0,
+				power: 0.08,
+				volume: 2.0,
+				notes:
+					"Emergency medical treatment area. Requires quick access from all modules. Should have privacy screen and good lighting.",
 			},
 			{
 				title: "First Aid Cabinet",
@@ -298,6 +445,13 @@ export const useSceneManager = defineStore(
 				y: 1.2,
 				z: 0,
 				type: "medical",
+				mass: 28,
+				noise: 0,
+				orientation: 0,
+				power: 0,
+				volume: 0.4,
+				notes:
+					"Essential emergency supplies. Must be accessible within seconds from any location. Consider multiple units throughout base.",
 			},
 			{
 				title: "Diagnostic Scanner",
@@ -308,6 +462,13 @@ export const useSceneManager = defineStore(
 				y: 0,
 				z: 1,
 				type: "medical",
+				mass: 18,
+				noise: 38,
+				orientation: 0,
+				power: 0.25,
+				volume: 0.3,
+				notes:
+					"Vital signs monitoring equipment. Should be near medical cot. Requires clear space for operation.",
 			},
 			{
 				title: "Sterilization Sink",
@@ -318,6 +479,13 @@ export const useSceneManager = defineStore(
 				y: 0,
 				z: 1,
 				type: "medical",
+				mass: 42,
+				noise: 45,
+				orientation: 0,
+				power: 0.5,
+				volume: 0.6,
+				notes:
+					"Medical hygiene station. Needs water recycler connection. Important for infection control and surgical prep.",
 			},
 
 			// 🍽️ GALLEY / FOOD AREA
@@ -330,6 +498,13 @@ export const useSceneManager = defineStore(
 				y: 0,
 				z: -1,
 				type: "galley",
+				mass: 48,
+				noise: 50,
+				orientation: 0,
+				power: 1.5,
+				volume: 0.8,
+				notes:
+					"Food preparation system with heating element. Needs water recycler connection. Central to crew morale and nutrition.",
 			},
 			{
 				title: "Water Tap",
@@ -340,6 +515,13 @@ export const useSceneManager = defineStore(
 				y: 0,
 				z: -2,
 				type: "galley",
+				mass: 8,
+				noise: 35,
+				orientation: 0,
+				power: 0.1,
+				volume: 0.1,
+				notes:
+					"Potable water access point. Must be connected to water recycler. Consider multiple taps for convenience.",
 			},
 			{
 				title: "Food Storage Locker",
@@ -350,6 +532,13 @@ export const useSceneManager = defineStore(
 				y: 0,
 				z: -2,
 				type: "galley",
+				mass: 120,
+				noise: 0,
+				orientation: 0,
+				power: 0.2,
+				volume: 2.5,
+				notes:
+					"Temperature-controlled food storage. Heavy when fully stocked. Requires inventory management and rotation system.",
 			},
 			{
 				title: "Folding Table",
@@ -360,6 +549,13 @@ export const useSceneManager = defineStore(
 				y: 0,
 				z: -1,
 				type: "galley",
+				mass: 22,
+				noise: 0,
+				orientation: 0,
+				power: 0,
+				volume: 1.0,
+				notes:
+					"Crew dining and social area. Important for crew morale and team cohesion. Should accommodate all crew simultaneously.",
 			},
 			{
 				title: "Waste Bin",
@@ -370,6 +566,13 @@ export const useSceneManager = defineStore(
 				y: 0,
 				z: 0,
 				type: "galley",
+				mass: 15,
+				noise: 0,
+				orientation: 0,
+				power: 0,
+				volume: 0.4,
+				notes:
+					"Waste management for galley area. Should be accessible but out of main traffic flow. Requires regular emptying.",
 			},
 
 			// 📦 STORAGE BAY
@@ -382,6 +585,13 @@ export const useSceneManager = defineStore(
 				y: 0,
 				z: -3,
 				type: "storage",
+				mass: 180,
+				noise: 0,
+				orientation: 0,
+				power: 0,
+				volume: 3.0,
+				notes:
+					"Bulk supply storage. Heavy when loaded. Should be near airlock for resupply missions. Consider floor load distribution.",
 			},
 			{
 				title: "Tool Rack",
@@ -392,6 +602,13 @@ export const useSceneManager = defineStore(
 				y: 0,
 				z: -2,
 				type: "storage",
+				mass: 32,
+				noise: 0,
+				orientation: 0,
+				power: 0,
+				volume: 0.35,
+				notes:
+					"Maintenance and repair tools. Should be centrally located for quick access. Organize by function and usage frequency.",
 			},
 			{
 				title: "Workshop Table",
@@ -402,6 +619,13 @@ export const useSceneManager = defineStore(
 				y: 0,
 				z: -2,
 				type: "storage",
+				mass: 85,
+				noise: 55,
+				orientation: 0,
+				power: 0.4,
+				volume: 1.5,
+				notes:
+					"Equipment maintenance area. Noise from repairs may disturb other areas. Needs good lighting and tool access.",
 			},
 			{
 				title: "Spare Suit Locker",
@@ -412,6 +636,13 @@ export const useSceneManager = defineStore(
 				y: 0,
 				z: -1,
 				type: "storage",
+				mass: 65,
+				noise: 0,
+				orientation: 0,
+				power: 0.08,
+				volume: 1.0,
+				notes:
+					"Redundant EVA suit storage for emergencies. Climate controlled. Should be separate from primary airlock suits.",
 			},
 
 			// 🔧 PASSAGEWAYS / INFRASTRUCTURE
@@ -424,6 +655,13 @@ export const useSceneManager = defineStore(
 				y: 0,
 				z: 5,
 				type: "infrastructure",
+				mass: 320,
+				noise: 52,
+				orientation: 0,
+				power: 0.3,
+				volume: 4.0,
+				notes:
+					"Pressure-sealed door for module connections. Can isolate sections in emergency. Heavy and requires structural support.",
 			},
 			{
 				title: "Light Strip",
@@ -434,6 +672,13 @@ export const useSceneManager = defineStore(
 				y: 2,
 				z: 3,
 				type: "infrastructure",
+				mass: 5,
+				noise: 0,
+				orientation: 0,
+				power: 0.08,
+				volume: 0.15,
+				notes:
+					"Corridor lighting for navigation and safety. Low power consumption. Should provide even illumination throughout base.",
 			},
 			{
 				title: "Ventilation Duct",
@@ -444,6 +689,13 @@ export const useSceneManager = defineStore(
 				y: 2.5,
 				z: 2,
 				type: "infrastructure",
+				mass: 28,
+				noise: 48,
+				orientation: 0,
+				power: 0.6,
+				volume: 1.2,
+				notes:
+					"Air distribution system. Constant low noise from airflow. Critical for air quality and temperature distribution.",
 			},
 			{
 				title: "Power Cable Conduits",
@@ -454,6 +706,13 @@ export const useSceneManager = defineStore(
 				y: 0,
 				z: 1,
 				type: "infrastructure",
+				mass: 45,
+				noise: 0,
+				orientation: 0,
+				power: 0,
+				volume: 0.8,
+				notes:
+					"Electrical distribution network. No power consumption (passive). Should be accessible for maintenance but protected from damage.",
 			},
 			{
 				title: "Fire Extinguisher",
@@ -464,6 +723,13 @@ export const useSceneManager = defineStore(
 				y: 1,
 				z: 4,
 				type: "infrastructure",
+				mass: 12,
+				noise: 0,
+				orientation: 0,
+				power: 0,
+				volume: 0.08,
+				notes:
+					"Emergency fire suppression. Should be distributed throughout base at regular intervals. Critical safety equipment.",
 			},
 		]);
 
