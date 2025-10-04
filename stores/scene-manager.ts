@@ -32,6 +32,7 @@ export type Hub = {
 };
 
 export const useSceneManager = defineStore(
+<<<<<<< HEAD
 	"SceneManager",
 	() => {
 		const hub = ref<Hub>();
@@ -45,4 +46,18 @@ export const useSceneManager = defineStore(
 			},
 		],
 	}
+=======
+  "SceneManager",
+  () => {
+    const hub = ref<Hub>();
+    return { hub };
+  },
+  {
+    persist: [
+      {
+        pick: ["hub"],
+      },
+    ],
+  },
+>>>>>>> 924de4d05f7d79df55117db41a93cc446794fbe0
 );

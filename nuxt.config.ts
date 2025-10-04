@@ -1,5 +1,6 @@
 export default defineNuxtConfig({
 	compatibilityDate: "2025-07-15",
+	ssr: false,
 	devtools: { enabled: false },
 	modules: [
 		"@nuxt/eslint",
@@ -16,12 +17,6 @@ export default defineNuxtConfig({
 			},
 		],
 	],
-	fonts: {
-		families: [
-			{ name: "Ubuntu", provider: "google" },
-			{ name: "Ubuntu Mono", provider: "google" },
-		],
-	},
 	colorMode: {
 		classSuffix: "",
 		preference: "dark",
@@ -29,8 +24,18 @@ export default defineNuxtConfig({
 	},
 	app: {
 		baseURL: "",
+		head: {
+			meta: [
+				{ name: "viewport", content: "width=device-width, initial-scale=1" },
+			],
+		},
 		pageTransition: { name: "page", mode: "out-in" },
 		layoutTransition: { name: "layout", mode: "out-in" },
+	},
+	runtimeConfig: {
+		public: {
+			baseURL: process.env.NODE_ENV === "production" ? "../" : "./",
+		},
 	},
 	vite: {
 		server: {

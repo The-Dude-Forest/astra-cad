@@ -23,6 +23,8 @@
 		"@tanstack/vue-table": "^8.21.3",
 		"@vee-validate/zod": "^4.15.1",
 		"@vueuse/core": "^13.9.0",
+		"aframe": "^1.7.1",
+		"aframe-render-order-component": "^1.1.0",
 		"class-variance-authority": "^0.7.1",
 		"clsx": "^2.1.1",
 		"embla-carousel-vue": "^8.6.0",
@@ -50,6 +52,7 @@
 	"devDependencies": {
 		"@nuxtjs/color-mode": "^3.5.2",
 		"prettier": "^3.4.2",
-		"eslint-config-prettier": "^10.0.1"
+		"eslint-config-prettier": "^10.0.1",
+		"@types/aframe": "^1.2.8"
 	}
 }
