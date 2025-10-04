@@ -17,7 +17,7 @@
 			:model-value="[zoom]"
 			@update:model-value="(e) => (zoom = e[0])"
 		/>
-		<a-scene embedded>
+		<a-scene :key="selectedFloor" embedded>
 			<a-plane
 				position="0 -0.1 -4"
 				rotation="-90 0.009 0"
@@ -30,13 +30,20 @@
 
 			<a-entity rotation="-30 0 0" position="-5 12 10">
 				<a-camera
-					:key="selectedFloor"
 					:active="selectedFloor === -1"
 					:look-controls-enabled="false"
 					near="1"
-					fov="60"
+					fov="90"
 				/>
 			</a-entity>
+
+			<a-entity
+				shadow="receive: true; cast: false"
+				rotation="0 0 0"
+				position="0 0 0"
+				scale="1 1 1"
+				:gltf-model="`${config.public.baseURL}models/bunkbed.glb`"
+			/>
 
 			<a-entity
 				v-for="(floor, i) in hub.floors"
@@ -50,7 +57,6 @@
 			>
 				<a-entity rotation="-90 0 0" :position="`6 ${10 - zoom} -5`">
 					<a-camera
-						:key="selectedFloor"
 						:active="selectedFloor === i"
 						:look-controls-enabled="false"
 						near="1"
