@@ -9,12 +9,6 @@ import { Button } from "@/components/ui/button";
 import Terminal from "./Terminal.vue";
 import { useSceneManager } from "@/stores/scene-manager";
 import { storeToRefs } from "pinia";
-import {
-	Tooltip,
-	TooltipProvider,
-	TooltipContent,
-	TooltipTrigger,
-} from "@/components/ui/tooltip";
 
 const key = ref(0);
 onMounted(() => (key.value = 1));
@@ -27,8 +21,20 @@ const sceneManager = useSceneManager();
 
 const { selectedFloor } = storeToRefs(sceneManager);
 
+function getPercentageColor(percentage: number) {
+	if (percentage > 75) return "text-red-500";
+	if (percentage > 40) return "text-yellow-500";
+	return "text-green-500";
+}
+
+function getPercentageColorBackground(percentage: number) {
+	if (percentage > 75) return "bg-red-500";
+	if (percentage > 40) return "bg-yellow-500";
+	return "bg-green-500";
+}
+
 const floorVolume = computed(() => {
-	return sceneManager.calculateFloorVolume(selectedFloor.value);
+	return sceneManager.calculateFloorVolumePercentage(selectedFloor.value);
 });
 </script>
 
@@ -37,7 +43,7 @@ const floorVolume = computed(() => {
 		<nav
 			class="flex items-center justify-between px-4 py-2 border-b border-border bg-background h-16"
 		>
-			<div class="flex items-center space-x-2">
+			<div class="flex items-center space-x-4">
 				<span class="text-foreground">
 					{{
 						sceneManager.selectedFloor === -1
@@ -47,19 +53,16 @@ const floorVolume = computed(() => {
 								: `Level ${sceneManager.selectedFloor}`
 					}}
 				</span>
-				<TooltipProvider>
-					<Tooltip>
-						<TooltipTrigger as-child>
-							<div class="flex items-center gap-2">
-								<div class="size-2 rounded-full" />
-								<span>{{ floorVolume }}</span>
-							</div>
-						</TooltipTrigger>
-						<TooltipContent>
-							Please select a level to view available items...
-						</TooltipContent>
-					</Tooltip>
-				</TooltipProvider>
+				<div class="flex items-center space-x-2">
+					<span class="text-muted-foreground">Volume usage:</span>
+					<div
+						class="size-2 rounded-full"
+						:class="getPercentageColorBackground(floorVolume)"
+					/>
+					<span :class="getPercentageColor(floorVolume)"
+						>{{ floorVolume.toFixed(2) }}%</span
+					>
+				</div>
 			</div>
 			<div class="flex items-center gap-2">
 				<div class="flex items-center gap-2">

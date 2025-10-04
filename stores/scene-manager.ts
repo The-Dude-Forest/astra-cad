@@ -761,13 +761,39 @@ export const useSceneManager = defineStore(
 
 		const selectedFloor = ref<number>(-1);
 
-		function calculateFloorVolume(floorNumber: number) {
+		function calculateFloorVolumePercentage(floorNumber: number) {
+			if (floorNumber === -1) {
+				// Return total hub's volume percentage
+				const totalVolume = hub.value.floors.reduce(
+					(acc, floor) => acc + (floor.volume || 0),
+					0
+				);
+				const totalItemVolume = hub.value.floors.reduce(
+					(acc, floor) =>
+						acc +
+						floor.items.reduce((acc, item) => acc + (item.volume || 0), 0),
+					0
+				);
+				return (totalItemVolume / totalVolume) * 100;
+			}
+
 			const floor = hub.value.floors.find((f) => f.level === floorNumber);
 			if (!floor) return 0;
-			return floor.items.reduce((acc, item) => acc + (item.volume || 0), 0);
+			if (!floor.volume) return 0;
+			const totalVolume = floor.items.reduce(
+				(acc, item) => acc + (item.volume || 0),
+				0
+			);
+			return (totalVolume / floor.volume) * 100;
 		}
 
-		return { hub, selectedFloor, items, selectedItem, calculateFloorVolume };
+		return {
+			hub,
+			selectedFloor,
+			items,
+			selectedItem,
+			calculateFloorVolumePercentage,
+		};
 	},
 	{
 		persist: [

@@ -1,6 +1,6 @@
 <template>
 	<div class="p-2 h-full w-full text-foreground bg-background">
-		<div class="flex gap-x-4">
+		<div class="flex gap-x-4 w-full px-4 pt-2">
 			<Select v-model="filterSearch">
 				<SelectTrigger class="w-[180px] !bg-secondary">
 					<SelectValue placeholder="Select a fruit" />
@@ -14,11 +14,11 @@
 					</SelectGroup>
 				</SelectContent>
 			</Select>
-			<div class="relative w-[180px] max-w-sm items-center !bg-secondary">
+			<div class="relative w-full items-center">
 				<Input
 					v-model="search"
 					id="search"
-					class="rounded-lg pl-10"
+					class="rounded-lg pl-10 w-full !bg-secondary"
 					type="text"
 					placeholder="Search..."
 				/>

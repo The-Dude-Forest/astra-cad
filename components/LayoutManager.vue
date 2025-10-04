@@ -161,16 +161,32 @@ function removeFloor(floorLevel: number) {
 										class="rounded-lg mb-2 border border-border"
 									>
 										<AccordionTrigger
-											class="hover:no-underline px-3 py-2 data-[state=open]:bg-muted/50"
+											class="hover:no-underline px-4 py-2 data-[state=open]:bg-muted/50"
+											as-child
 										>
-											<div class="flex items-center gap-2 flex-1">
-												<Package class="h-3 w-3" />
-												<span class="text-sm font-medium">
-													{{ item.title || `Item ${itemIndex + 1}` }}
-												</span>
-												<Badge variant="outline" class="text-xs">
-													{{ item.type }}
-												</Badge>
+											<div class="flex items-center w-full justify-between">
+												<div class="flex items-center gap-2 flex-1">
+													<Package class="h-3 w-3" />
+													<span class="text-sm font-medium">
+														{{ item.title || `Item ${itemIndex + 1}` }}
+													</span>
+													<Badge variant="outline" class="text-xs">
+														{{ item.type }}
+													</Badge>
+												</div>
+												<Button
+													@click="
+														(e: MouseEvent) => {
+															e.stopPropagation();
+															removeItem(floor.level, itemIndex);
+														}
+													"
+													size="icon"
+													variant="ghost"
+													class="text-destructive"
+												>
+													<Trash2 class="h-3 w-3" />
+												</Button>
 											</div>
 										</AccordionTrigger>
 										<AccordionContent class="px-3 pb-3">
