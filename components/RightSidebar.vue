@@ -4,6 +4,8 @@ import {
 	ResizablePanel,
 	ResizableHandle,
 } from "@/components/ui/resizable";
+import MissionInformation from "@/components/MissionInformation.vue";
+import { ScrollArea } from "@/components/ui/scroll-area";
 </script>
 
 <template>
@@ -14,6 +16,9 @@ import {
 					Mission Information
 				</h2>
 			</div>
+			<ScrollArea class="h-full">
+				<MissionInformation />
+			</ScrollArea>
 		</ResizablePanel>
 
 		<ResizableHandle :with-handle="true" />

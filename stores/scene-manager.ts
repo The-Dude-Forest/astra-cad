@@ -92,12 +92,15 @@ export const useSceneManager = defineStore(
 				},
 			],
 		});
-		return { hub };
+
+		const selectedFloor = ref<number>(0);
+
+		return { hub, selectedFloor };
 	},
 	{
 		persist: [
 			{
-				pick: ["hub"],
+				pick: ["hub", "selectedFloor"],
 				storage: localStorage,
 			},
 		],
