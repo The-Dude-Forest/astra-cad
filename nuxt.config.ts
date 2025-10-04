@@ -9,9 +9,28 @@ export default defineNuxtConfig({
     "shadcn-nuxt",
     "shadcn-nuxt",
   ],
+  app: {
+    baseURL: "",
+    pageTransition: { name: "page", mode: "out-in" },
+    layoutTransition: { name: "layout", mode: "out-in" },
+  },
+  vite: {
+    server: {
+      watch: {
+        ignored: [
+          "**/node_modules/**",
+          "**/.git/**",
+          "**/public/**",
+          "**/.output/**",
+          "**/assets/**",
+          "**/dist/**",
+        ],
+      },
+    },
+    base: "",
+  },
   shadcn: {
     prefix: "",
     componentDir: "./components/ui",
   },
 });
-
