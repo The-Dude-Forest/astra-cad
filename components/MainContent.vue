@@ -72,8 +72,12 @@ const { selectedFloor } = storeToRefs(sceneManager);
 					:default-size="35"
 					:min-size="10"
 					:max-size="50"
+					class="flex justify-center items-center"
 				>
 					<Terminal v-if="selectedFloor !== -1" />
+					<Label v-else class="text-2xl text-white">
+						Please select a level to view available items...
+					</Label>
 				</ResizablePanel>
 			</ResizablePanelGroup>
 		</div>
