@@ -84,7 +84,9 @@ const sceneManager = useSceneManager();
 const filterSearch = ref("all");
 
 const handleItemSelection = (item: Item) => {
-	hub.value.floors[selectedFloor.value].items.push(item);
+	hub.value.floors
+		.find((e) => e.level === selectedFloor.value)
+		?.items.push(item);
 };
 
 const { hub, selectedFloor, items, selectedItem } = storeToRefs(sceneManager);
