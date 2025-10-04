@@ -74,7 +74,7 @@ export const useSceneManager = defineStore(
 			{
 				title: "Command Console",
 				desc: "Main control and monitoring console.",
-				imgUrl: "/images/command-console.png",
+				imgUrl: "/images/BIOMONITOR.jpeg",
 				modelUrl: "models/command-console.glb",
 				x: 2,
 				y: 0,
@@ -84,7 +84,7 @@ export const useSceneManager = defineStore(
 			{
 				title: "Workstation",
 				desc: "Secondary control console for operations and data tracking.",
-				imgUrl: "/images/workstation.png",
+				imgUrl: "/images/WORKSTATION.jpeg",
 				modelUrl: "models/workstation.glb",
 				x: 3,
 				y: 0,
@@ -94,7 +94,7 @@ export const useSceneManager = defineStore(
 			{
 				title: "Main Display Screen",
 				desc: "Mission data and base overview display.",
-				imgUrl: "/images/main-display.png",
+				imgUrl: "/images/WALLDISPLAY.jpeg",
 				modelUrl: "models/main-display.glb",
 				x: 0,
 				y: 1.5,
@@ -104,7 +104,7 @@ export const useSceneManager = defineStore(
 			{
 				title: "Communication Panel",
 				desc: "Handles internal and external comms.",
-				imgUrl: "/images/comm-panel.png",
+				imgUrl: "/images/BIOMONITOR.jpeg",
 				modelUrl: "models/comm-panel.glb",
 				x: -1,
 				y: 1.2,
@@ -114,7 +114,7 @@ export const useSceneManager = defineStore(
 			{
 				title: "Server Rack",
 				desc: "Core computing and mission processing unit.",
-				imgUrl: "/images/server-rack.png",
+				imgUrl: "/images/LOCKER.jpeg",
 				modelUrl: "models/server-rack.glb",
 				x: 1,
 				y: 0,
@@ -124,7 +124,7 @@ export const useSceneManager = defineStore(
 			{
 				title: "Anchored Chair",
 				desc: "Low-gravity secured operator chair.",
-				imgUrl: "/images/chair.png",
+				imgUrl: "/images/CHAIR.jpeg",
 				modelUrl: "models/chair.glb",
 				x: 2,
 				y: 0,
@@ -136,7 +136,7 @@ export const useSceneManager = defineStore(
 			{
 				title: "Sleeping Pod",
 				desc: "Compact sleeping area for one crew member.",
-				imgUrl: "/images/sleeping-pod.png",
+				imgUrl: "/images/BED.jpeg",
 				modelUrl: "models/sleeping-pod.glb",
 				x: -3,
 				y: 0,
@@ -146,7 +146,7 @@ export const useSceneManager = defineStore(
 			{
 				title: "Storage Locker",
 				desc: "Personal locker for clothing and small gear.",
-				imgUrl: "/images/locker.png",
+				imgUrl: "/images/LOCKER.jpeg",
 				modelUrl: "models/locker.glb",
 				x: -2,
 				y: 0,
@@ -156,20 +156,10 @@ export const useSceneManager = defineStore(
 			{
 				title: "Reading Light",
 				desc: "Small personal light attached to bunk.",
-				imgUrl: "/images/reading-light.png",
+				imgUrl: "/images/WALLLIGHT.jpeg",
 				modelUrl: "models/reading-light.glb",
 				x: -3,
 				y: 1.5,
-				z: 4,
-				type: "crew",
-			},
-			{
-				title: "Ventilation Outlet",
-				desc: "Provides airflow inside sleeping quarters.",
-				imgUrl: "/images/vent.png",
-				modelUrl: "models/vent.glb",
-				x: -4,
-				y: 2,
 				z: 4,
 				type: "crew",
 			},
@@ -178,7 +168,7 @@ export const useSceneManager = defineStore(
 			{
 				title: "Oxygen Generator",
 				desc: "Produces breathable oxygen from recycled materials.",
-				imgUrl: "/images/oxygen-generator.png",
+				imgUrl: "/images/GENERATOR.jpg",
 				modelUrl: "models/oxygen-generator.glb",
 				x: 0,
 				y: 0,
@@ -188,7 +178,7 @@ export const useSceneManager = defineStore(
 			{
 				title: "CO₂ Scrubber",
 				desc: "Removes carbon dioxide from cabin air.",
-				imgUrl: "/images/co2-scrubber.png",
+				imgUrl: "/images/GENERATOR.jpeg",
 				modelUrl: "models/co2-scrubber.glb",
 				x: 1,
 				y: 0,
@@ -198,7 +188,7 @@ export const useSceneManager = defineStore(
 			{
 				title: "Water Recycler",
 				desc: "Filters and recycles water for reuse.",
-				imgUrl: "/images/water-recycler.png",
+				imgUrl: "/images/CRYOTUBE.jpeg",
 				modelUrl: "models/water-recycler.glb",
 				x: 2,
 				y: 0,
@@ -208,7 +198,7 @@ export const useSceneManager = defineStore(
 			{
 				title: "Thermal Control Unit",
 				desc: "Regulates temperature throughout the base.",
-				imgUrl: "/images/thermal-unit.png",
+				imgUrl: "/images/GENERATOR.jpeg",
 				modelUrl: "models/thermal-unit.glb",
 				x: 1,
 				y: 0,
@@ -218,7 +208,7 @@ export const useSceneManager = defineStore(
 			{
 				title: "Power Battery",
 				desc: "Stores electrical energy for life support systems.",
-				imgUrl: "/images/battery.png",
+				imgUrl: "/images/BATTERY.jpeg",
 				modelUrl: "models/battery.glb",
 				x: 0,
 				y: 0,
@@ -292,7 +282,7 @@ export const useSceneManager = defineStore(
 			{
 				title: "Medical Cot",
 				desc: "Bed for treatment and examination.",
-				imgUrl: "/images/medical-cot.png",
+				imgUrl: "/images/BED.jpeg",
 				modelUrl: "models/medical-cot.glb",
 				x: 0,
 				y: 0,
@@ -364,7 +354,7 @@ export const useSceneManager = defineStore(
 			{
 				title: "Folding Table",
 				desc: "Compact dining and prep surface.",
-				imgUrl: "/images/folding-table.png",
+				imgUrl: "/images/TABLE.jpeg",
 				modelUrl: "models/folding-table.glb",
 				x: 3,
 				y: 0,
@@ -406,7 +396,7 @@ export const useSceneManager = defineStore(
 			{
 				title: "Workshop Table",
 				desc: "Bench for equipment repair and assembly.",
-				imgUrl: "/images/workshop-table.png",
+				imgUrl: "/images/TABLE.jpeg",
 				modelUrl: "models/workshop-table.glb",
 				x: -2,
 				y: 0,
@@ -438,7 +428,7 @@ export const useSceneManager = defineStore(
 			{
 				title: "Light Strip",
 				desc: "Illuminates corridors.",
-				imgUrl: "/images/light-strip.png",
+				imgUrl: "/images/WALLLIGHT.jpeg",
 				modelUrl: "models/light-strip.glb",
 				x: 0,
 				y: 2,

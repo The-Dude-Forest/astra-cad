@@ -9,6 +9,7 @@ export default defineNuxtConfig({
 		"@nuxtjs/tailwindcss",
 		"@nuxtjs/color-mode",
 		"shadcn-nuxt",
+		"@nuxt/icon",
 		"@formkit/auto-animate/nuxt",
 		"@pinia/nuxt",
 		[

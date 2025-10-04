@@ -1,23 +1,39 @@
 <template>
 	<div class="p-2 h-full w-full text-foreground bg-background">
-		<Select v-model="filterSearch">
-			<SelectTrigger class="w-[180px] !bg-secondary">
-				<SelectValue placeholder="Select a fruit" />
-			</SelectTrigger>
-			<SelectContent>
-				<SelectGroup>
-					<SelectItem value="all"> All </SelectItem>
-					<SelectItem v-for="type in ItemTypes" :key="type" :value="type">
-						{{ type }}
-					</SelectItem>
-				</SelectGroup>
-			</SelectContent>
-		</Select>
+		<div class="flex gap-x-4">
+			<Select v-model="filterSearch">
+				<SelectTrigger class="w-[180px] !bg-secondary">
+					<SelectValue placeholder="Select a fruit" />
+				</SelectTrigger>
+				<SelectContent>
+					<SelectGroup>
+						<SelectItem value="all"> All </SelectItem>
+						<SelectItem v-for="type in ItemTypes" :key="type" :value="type">
+							{{ type }}
+						</SelectItem>
+					</SelectGroup>
+				</SelectContent>
+			</Select>
+			<div class="relative w-[180px] max-w-sm items-center !bg-secondary">
+				<Input
+					v-model="search"
+					id="search"
+					class="rounded-lg pl-10"
+					type="text"
+					placeholder="Search..."
+				/>
+				<span
+					class="absolute start-0 inset-y-0 flex items-center justify-center px-2"
+				>
+					<Search class="size-6 text-muted-foreground" />
+				</span>
+			</div>
+		</div>
 		<section
 			class="mt-2 p-4 pb-14 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 w-full h-full overflow-y-auto scroll-area"
 		>
 			<Card
-				v-for="(item, i) in items"
+				v-for="(item, i) in itemsFiltered"
 				class="cursor-pointer select-none transition-all h-40 pt-2 gap-y-3 border-0"
 				:class="
 					item.modelUrl === selectedItem?.modelUrl
@@ -28,25 +44,21 @@
 			>
 				<CardHeader class="py-0">
 					<CardTitle
-						class="flex p-0 text-center justify-start gap-x-1 items-center"
+						class="flex p-0 text-center flex-col md:text-sm justify-start gap-y-4 items-center"
 					>
+						<Avatar class="rounded-lg m-0 p-0 w-18 h-16">
+							<AvatarImage :src="item.imgUrl" alt="@unovue" class="p-0" />
+						</Avatar>
 						{{ item.title }}
 					</CardTitle>
-					<CardDescription class="text-xs">
-						<Avatar class="rounded-none m-0 p-0 w-full h-12">
-							<AvatarImage
-								:src="`https://avatar.vercel.sh/${i}`"
-								alt="@unovue"
-								class="p-0"
-							/>
-						</Avatar>
-					</CardDescription>
 				</CardHeader>
 				<CardContent
+					v-if="item.desc"
 					class="flex py-0 items-center text-xs text-muted-foreground justify-center"
 				>
-					{{ item.desc }} <br />
-					{{ item.type }}
+					{{
+						item.desc?.length > 50 ? item.desc.slice(0, 50) + "…" : item.desc
+					}}
 				</CardContent>
 			</Card>
 		</section>
@@ -56,6 +68,18 @@
 <script setup lang="ts">
 import { useSceneManager, ItemTypes, type Item } from "@/stores/scene-manager";
 import { storeToRefs } from "pinia";
+import { Search } from "lucide-vue-next";
+
+const itemsFiltered = computed(() =>
+	items.value.filter(
+		(e) =>
+			e.title.toLowerCase().includes(search.value.toLowerCase()) &&
+			(filterSearch.value === "all" ? true : filterSearch.value === e.type)
+	)
+);
+
+const search = ref("");
+
 const sceneManager = useSceneManager();
 const filterSearch = ref("all");
 
