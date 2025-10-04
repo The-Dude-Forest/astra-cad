@@ -8,6 +8,7 @@ import {
 import { Button } from "@/components/ui/button";
 import Terminal from "./Terminal.vue";
 import { useSceneManager } from "@/stores/scene-manager";
+import { storeToRefs } from "pinia";
 
 const key = ref(0);
 onMounted(() => (key.value = 1));
@@ -17,6 +18,8 @@ const handleSave = () => {
 };
 
 const sceneManager = useSceneManager();
+
+const { selectedFloor } = storeToRefs(sceneManager);
 </script>
 
 <template>
@@ -64,8 +67,13 @@ const sceneManager = useSceneManager();
 
 				<ResizableHandle :with-handle="true" />
 
-				<ResizablePanel :default-size="35" :min-size="10" :max-size="50">
-					<Terminal />
+				<ResizablePanel
+					v-auto-animate
+					:default-size="35"
+					:min-size="10"
+					:max-size="50"
+				>
+					<Terminal v-if="selectedFloor !== -1" />
 				</ResizablePanel>
 			</ResizablePanelGroup>
 		</div>
