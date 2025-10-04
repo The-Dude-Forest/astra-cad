@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Sparkles, Plus } from "lucide-vue-next";
+import { Plus } from "lucide-vue-next";
 import {
 	ResizablePanelGroup,
 	ResizablePanel,
@@ -36,8 +36,8 @@ const handleGenerateSuggestions = () => {
 	<div class="h-full w-full bg-background flex flex-col">
 		<div class="border-b border-border h-16 flex items-center px-4">
 			<div class="flex items-center gap-2">
-				<Sparkles class="h-6 w-6 text-primary" />
-				<h1 class="text-xl font-bold text-foreground">AstraCAD</h1>
+				<img src="/logo/logo.png" alt="AstraCAD" class="size-8" />
+				<h1 class="text-xl font-bold text-foreground font-mono">AstraCAD</h1>
 			</div>
 		</div>
 		<div class="flex-1">
