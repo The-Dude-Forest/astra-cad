@@ -162,7 +162,6 @@ function removeFloor(floorLevel: number) {
 									>
 										<AccordionTrigger
 											class="hover:no-underline px-4 py-2 data-[state=open]:bg-muted/50"
-											as-child
 										>
 											<div class="flex items-center w-full justify-between">
 												<div class="flex items-center gap-2 flex-1">
