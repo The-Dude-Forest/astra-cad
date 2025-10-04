@@ -74,6 +74,9 @@ dependencies:
   vue-router:
     specifier: ^4.5.1
     version: 4.5.1(vue@3.5.22)
+  vue-sonner:
+    specifier: ^2.0.9
+    version: 2.0.9(nuxt@3.19.2)
   zod:
     specifier: ^4.1.11
     version: 4.1.11
@@ -8119,6 +8122,23 @@ packages:
     dependencies:
       '@vue/devtools-api': 6.6.4
       vue: 3.5.22(typescript@5.9.3)
+    dev: false
+
+  /vue-sonner@2.0.9(nuxt@3.19.2):
+    resolution: {integrity: sha512-i6BokNlNDL93fpzNxN/LZSn6D6MzlO+i3qXt6iVZne3x1k7R46d5HlFB4P8tYydhgqOrRbIZEsnRd3kG7qGXyw==}
+    peerDependencies:
+      '@nuxt/kit': ^4.0.3
+      '@nuxt/schema': ^4.0.3
+      nuxt: ^4.0.3
+    peerDependenciesMeta:
+      '@nuxt/kit':
+        optional: true
+      '@nuxt/schema':
+        optional: true
+      nuxt:
+        optional: true
+    dependencies:
+      nuxt: 3.19.2(@vue/compiler-sfc@3.5.22)(eslint@9.37.0)(typescript@5.9.3)(vite@7.1.9)
     dev: false
 
   /vue@3.5.22(typescript@5.9.3):
