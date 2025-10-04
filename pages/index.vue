@@ -3,10 +3,10 @@ import {
 	ResizablePanelGroup,
 	ResizablePanel,
 	ResizableHandle,
-} from '@/components/ui/resizable';
-import LeftSidebar from '@/components/LeftSidebar.vue';
-import RightSidebar from '@/components/RightSidebar.vue';
-import MainContent from '@/components/MainContent.vue';
+} from "@/components/ui/resizable";
+import LeftSidebar from "@/components/LeftSidebar.vue";
+import RightSidebar from "@/components/RightSidebar.vue";
+import MainContent from "@/components/MainContent.vue";
 </script>
 
 <template>

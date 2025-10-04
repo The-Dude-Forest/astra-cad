@@ -3,9 +3,9 @@ import {
 	ResizablePanelGroup,
 	ResizablePanel,
 	ResizableHandle,
-} from '@/components/ui/resizable';
-import Viewport3D from './Viewport3D.vue';
-import Terminal from './Terminal.vue';
+} from "@/components/ui/resizable";
+import Viewport3D from "./Viewport3D.vue";
+import Terminal from "./Terminal.vue";
 </script>
 
 <template>
