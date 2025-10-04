@@ -1,3 +1,3 @@
 <template>
-	<div class="h-full w-full"></div>
+	<div class="h-full w-full bg-background"></div>
 </template>

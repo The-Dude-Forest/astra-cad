@@ -16,6 +16,12 @@ export default defineNuxtConfig({
 			},
 		],
 	],
+	fonts: {
+		families: [
+			{ name: "Ubuntu", provider: "google" },
+			{ name: "Ubuntu Mono", provider: "google" },
+		],
+	},
 	colorMode: {
 		classSuffix: "",
 		preference: "dark",

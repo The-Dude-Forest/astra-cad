@@ -10,7 +10,9 @@ import {
 	<ResizablePanelGroup direction="vertical">
 		<ResizablePanel :default-size="30" :min-size="15" :max-size="50">
 			<div class="h-full w-full bg-background p-4">
-				<h2 class="text-lg font-semibold mb-2">Mission Information</h2>
+				<h2 class="text-lg font-semibold mb-2 text-foreground">
+					Mission Information
+				</h2>
 			</div>
 		</ResizablePanel>
 
@@ -18,7 +20,7 @@ import {
 
 		<ResizablePanel :default-size="70" :min-size="0" :collapsible="true">
 			<div class="h-full w-full bg-background p-4">
-				<h2 class="text-lg font-semibold mb-2">AI Chat</h2>
+				<h2 class="text-lg font-semibold mb-2 text-foreground">AI Chat</h2>
 			</div>
 		</ResizablePanel>
 	</ResizablePanelGroup>

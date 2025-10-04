@@ -1,5 +1,10 @@
 <script setup lang="ts">
 import { Sparkles } from "lucide-vue-next";
+import {
+	ResizablePanelGroup,
+	ResizablePanel,
+	ResizableHandle,
+} from "@/components/ui/resizable";
 </script>
 
 <template>
@@ -10,8 +15,26 @@ import { Sparkles } from "lucide-vue-next";
 				<h1 class="text-xl font-bold text-foreground">AstraCAD</h1>
 			</div>
 		</div>
-		<div class="flex-1 p-4">
-			<!-- Sidebar content goes here -->
+		<div class="flex-1">
+			<ResizablePanelGroup direction="vertical">
+				<ResizablePanel :default-size="25" :min-size="10" :max-size="50">
+					<div class="h-full w-full bg-background p-4">
+						<h2 class="text-lg font-semibold mb-2 text-foreground">
+							Habitat Information
+						</h2>
+					</div>
+				</ResizablePanel>
+
+				<ResizableHandle :with-handle="true" />
+
+				<ResizablePanel :default-size="75" :min-size="20">
+					<div class="h-full w-full bg-background p-4">
+						<h2 class="text-lg font-semibold mb-2 text-foreground">
+							Layout Manager
+						</h2>
+					</div>
+				</ResizablePanel>
+			</ResizablePanelGroup>
 		</div>
 	</div>
 </template>
