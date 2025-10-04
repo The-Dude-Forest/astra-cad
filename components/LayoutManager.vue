@@ -23,7 +23,7 @@ const accordionValue = ref(
 );
 
 const sortedFloors = computed(() => {
-	return [...sceneManager.hub.floors].sort((a, b) => b.level - a.level);
+	return sceneManager.hub.floors.sort((a, b) => b.level - a.level);
 });
 
 watch(accordionValue, (newValue) => {
@@ -144,7 +144,7 @@ function removeFloor(floorLevel: number) {
 
 							<Separator />
 
-							<div class="space-y-3">
+							<div class="space-y-3 py-2">
 								<div class="flex items-center justify-between">
 									<Label class="flex items-center gap-2">
 										<Package class="h-4 w-4" />
@@ -152,61 +152,85 @@ function removeFloor(floorLevel: number) {
 									</Label>
 								</div>
 
-								<div
-									v-for="(item, itemIndex) in floor.items"
-									:key="`item-${floor.level}-${itemIndex}`"
-									class="space-y-2"
-								>
-									<div class="flex items-center justify-between">
-										<Input
-											v-model="item.title"
-											placeholder="Item title"
-											class="font-semibold flex-1 mr-2"
-										/>
-										<Button
-											@click="removeItem(floor.level, itemIndex)"
-											size="sm"
-											variant="ghost"
+								<Accordion type="multiple" class="w-full">
+									<AccordionItem
+										v-for="(item, itemIndex) in floor.items"
+										:key="`item-${floor.level}-${itemIndex}`"
+										:value="`item-${floor.level}-${itemIndex}`"
+										class="rounded-lg mb-2 border border-border"
+									>
+										<AccordionTrigger
+											class="hover:no-underline px-3 py-2 data-[state=open]:bg-muted/50"
 										>
-											<Trash2 class="h-4 w-4 text-destructive" />
-										</Button>
-									</div>
+											<div class="flex items-center gap-2 flex-1">
+												<Package class="h-3 w-3" />
+												<span class="text-sm font-medium">
+													{{ item.title || `Item ${itemIndex + 1}` }}
+												</span>
+												<Badge variant="outline" class="text-xs">
+													{{ item.type }}
+												</Badge>
+											</div>
+										</AccordionTrigger>
+										<AccordionContent class="px-3 pb-3">
+											<div class="space-y-3 pt-2">
+												<div class="space-y-2">
+													<Label>Title</Label>
+													<Input v-model="item.title" disabled />
+												</div>
 
-									<Input v-model="item.desc" placeholder="Description" />
+												<div class="space-y-2">
+													<Label>Description</Label>
+													<Input v-model="item.desc" disabled />
+												</div>
 
-									<div class="grid grid-cols-2 gap-2">
-										<Input v-model="item.type" placeholder="Type" />
-										<Input
-											v-model.number="item.volume"
-											type="number"
-											placeholder="Volume"
-										/>
-									</div>
+												<div class="space-y-2">
+													<Label>Position (X, Y, Z)</Label>
+													<div class="grid grid-cols-3 gap-2">
+														<Input
+															v-model.number="item.x"
+															type="number"
+															placeholder="X"
+														/>
+														<Input
+															v-model.number="item.y"
+															type="number"
+															placeholder="Y"
+														/>
+														<Input
+															v-model.number="item.z"
+															type="number"
+															placeholder="Z"
+														/>
+													</div>
+												</div>
 
-									<div class="grid grid-cols-3 gap-2">
-										<Input
-											v-model.number="item.x"
-											type="number"
-											placeholder="X"
-										/>
-										<Input
-											v-model.number="item.y"
-											type="number"
-											placeholder="Y"
-										/>
-										<Input
-											v-model.number="item.z"
-											type="number"
-											placeholder="Z"
-										/>
-									</div>
+												<div class="space-y-2">
+													<Label>Orientation (°)</Label>
+													<Input
+														v-model.number="item.orientation"
+														type="number"
+														placeholder="Degrees"
+													/>
+												</div>
 
-									<Input
-										v-model.number="item.orientation"
-										type="number"
-										placeholder="Orientation (degrees)"
-									/>
-								</div>
+												<div class="space-y-2">
+													<Label>Notes</Label>
+													<Input v-model="item.notes" disabled />
+												</div>
+											</div>
+											<Button
+												@click="removeItem(floor.level, itemIndex)"
+												size="sm"
+												variant="destructive"
+												class="w-full mt-4"
+											>
+												<Trash2 class="h-3 w-3 mr-1" />
+												Remove Item
+											</Button>
+										</AccordionContent>
+									</AccordionItem>
+								</Accordion>
 
 								<div
 									v-if="floor.items.length === 0"

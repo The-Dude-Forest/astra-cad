@@ -12,7 +12,6 @@ import {
 	AlertCircle,
 	ChevronRight,
 } from "lucide-vue-next";
-import { formatTimestamp } from "@/utils/format-timestamp";
 
 const suggestionsStore = useAISuggestions();
 
@@ -75,9 +74,6 @@ const getSuggestionColor = (type: SuggestionType) => {
 						{{ suggestion.title }}
 					</span>
 				</div>
-				<span class="text-xs text-muted-foreground">
-					{{ formatTimestamp(suggestion.timestamp) }}
-				</span>
 			</CollapsibleTrigger>
 			<CollapsibleContent>
 				<div class="px-3 py-3 pl-11">

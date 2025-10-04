@@ -9,6 +9,12 @@ import { Button } from "@/components/ui/button";
 import Terminal from "./Terminal.vue";
 import { useSceneManager } from "@/stores/scene-manager";
 import { storeToRefs } from "pinia";
+import {
+	Tooltip,
+	TooltipProvider,
+	TooltipContent,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const key = ref(0);
 onMounted(() => (key.value = 1));
@@ -20,6 +26,10 @@ const handleSave = () => {
 const sceneManager = useSceneManager();
 
 const { selectedFloor } = storeToRefs(sceneManager);
+
+const floorVolume = computed(() => {
+	return sceneManager.calculateFloorVolume(selectedFloor.value);
+});
 </script>
 
 <template>
@@ -27,15 +37,30 @@ const { selectedFloor } = storeToRefs(sceneManager);
 		<nav
 			class="flex items-center justify-between px-4 py-2 border-b border-border bg-background h-16"
 		>
-			<span class="text-foreground">
-				{{
-					sceneManager.selectedFloor === -1
-						? "Hub"
-						: sceneManager.selectedFloor === 0
-							? "Ground Level"
-							: `Level ${sceneManager.selectedFloor}`
-				}}
-			</span>
+			<div class="flex items-center space-x-2">
+				<span class="text-foreground">
+					{{
+						sceneManager.selectedFloor === -1
+							? "Hub"
+							: sceneManager.selectedFloor === 0
+								? "Ground Level"
+								: `Level ${sceneManager.selectedFloor}`
+					}}
+				</span>
+				<TooltipProvider>
+					<Tooltip>
+						<TooltipTrigger as-child>
+							<div class="flex items-center gap-2">
+								<div class="size-2 rounded-full" />
+								<span>{{ floorVolume }}</span>
+							</div>
+						</TooltipTrigger>
+						<TooltipContent>
+							Please select a level to view available items...
+						</TooltipContent>
+					</Tooltip>
+				</TooltipProvider>
+			</div>
 			<div class="flex items-center gap-2">
 				<div class="flex items-center gap-2">
 					<NuxtLink
@@ -56,7 +81,6 @@ const { selectedFloor } = storeToRefs(sceneManager);
 			</div>
 		</nav>
 
-		<!-- Main Content Area -->
 		<div class="flex-1 overflow-hidden">
 			<ResizablePanelGroup direction="vertical">
 				<ResizablePanel :default-size="65" :min-size="30">

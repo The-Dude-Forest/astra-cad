@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Plus } from "lucide-vue-next";
+import { Sparkles, Plus } from "lucide-vue-next";
 import {
 	ResizablePanelGroup,
 	ResizablePanel,
@@ -19,7 +19,7 @@ function addFloor() {
 	const newLevel = sceneManager.hub.floors.length;
 	sceneManager.hub.floors.push({
 		level: newLevel,
-		type: "custom",
+		type: "upper",
 		volume: 100,
 		acceptedItemTypes: [],
 		items: [],
@@ -51,13 +51,8 @@ const handleGenerateSuggestions = () => {
 								<h2 class="text-lg font-semibold text-foreground">
 									AI Suggestions
 								</h2>
-								<Button
-									size="sm"
-									variant="default"
-									class="gap-2"
-									@click="handleGenerateSuggestions"
-								>
-									<Sparkles class="w-4 h-4" />
+								<Button size="sm" @click="handleGenerateSuggestions">
+									<Sparkles class="w-4 h-4" mr-1 />
 									Generate
 								</Button>
 							</div>

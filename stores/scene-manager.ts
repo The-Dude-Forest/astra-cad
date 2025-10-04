@@ -505,7 +505,13 @@ export const useSceneManager = defineStore(
 
 		const selectedFloor = ref<number>(-1);
 
-		return { hub, selectedFloor, items, selectedItem };
+		function calculateFloorVolume(floorNumber: number) {
+			const floor = hub.value.floors.find((f) => f.level === floorNumber);
+			if (!floor) return 0;
+			return floor.items.reduce((acc, item) => acc + (item.volume || 0), 0);
+		}
+
+		return { hub, selectedFloor, items, selectedItem, calculateFloorVolume };
 	},
 	{
 		persist: [
