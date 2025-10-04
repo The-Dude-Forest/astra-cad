@@ -14,6 +14,9 @@
 		"format:check": "prettier --check \"**/*.{js,mjs,ts,vue,json,css,scss,md}\""
 	},
 	"dependencies": {
+		"@ai-sdk/google": "^2.0.17",
+		"@ai-sdk/openai": "^2.0.42",
+		"@ai-sdk/vue": "^2.0.60",
 		"@nuxt/eslint": "1.9.0",
 		"@nuxt/fonts": "0.11.4",
 		"@nuxt/icon": "2.0.0",
@@ -25,6 +28,7 @@
 		"@vueuse/core": "^13.9.0",
 		"aframe": "^1.7.1",
 		"aframe-render-order-component": "^1.1.0",
+		"ai": "^5.0.60",
 		"class-variance-authority": "^0.7.1",
 		"clsx": "^2.1.1",
 		"embla-carousel-vue": "^8.6.0",
@@ -51,8 +55,8 @@
 	},
 	"devDependencies": {
 		"@nuxtjs/color-mode": "^3.5.2",
-		"prettier": "^3.4.2",
+		"@types/aframe": "^1.2.8",
 		"eslint-config-prettier": "^10.0.1",
-		"@types/aframe": "^1.2.8"
+		"prettier": "^3.4.2"
 	}
 }

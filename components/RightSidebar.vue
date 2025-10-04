@@ -7,6 +7,7 @@ import {
 import MissionInformation from "@/components/MissionInformation.vue";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useSceneManager } from "@/stores/scene-manager";
+import AIChat from "./AIChat.vue";
 
 const sceneManager = useSceneManager();
 </script>
@@ -28,7 +29,7 @@ const sceneManager = useSceneManager();
 
 		<ResizablePanel :default-size="60" :min-size="0" :collapsible="true">
 			<div class="h-full w-full bg-background p-4">
-				<h2 class="text-lg font-semibold mb-2 text-foreground">AI Chat</h2>
+				<AIChat />
 			</div>
 		</ResizablePanel>
 	</ResizablePanelGroup>

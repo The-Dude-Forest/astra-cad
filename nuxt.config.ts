@@ -33,6 +33,7 @@ export default defineNuxtConfig({
 		layoutTransition: { name: "layout", mode: "out-in" },
 	},
 	runtimeConfig: {
+		geminiApiKey: process.env.NUXT_GEMINI_API_KEY || "",
 		public: {
 			baseURL: process.env.NODE_ENV === "production" ? "../" : "./",
 		},
