@@ -10,11 +10,10 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useAISuggestions } from "@/stores/ai-suggestions";
-import { useSceneManager } from "@/stores/scene-manager";
 import { Info, AlertTriangle, AlertCircle, Sparkles, X } from "lucide-vue-next";
+import { formatTimestamp } from "@/utils/format-timestamp";
 
 const suggestionsStore = useAISuggestions();
-const sceneManager = useSceneManager();
 
 const getSuggestionIcon = (type: SuggestionType) => {
 	switch (type) {
@@ -49,22 +48,6 @@ const getSuggestionColor = (type: SuggestionType) => {
 	}
 };
 
-const formatTimestamp = (timestamp: number) => {
-	const diff = Date.now() - timestamp;
-	const minutes = Math.floor(diff / 60000);
-	const hours = Math.floor(minutes / 60);
-	const days = Math.floor(hours / 24);
-
-	if (days > 0) return `${days}d ago`;
-	if (hours > 0) return `${hours}h ago`;
-	if (minutes > 0) return `${minutes}m ago`;
-	return "Just now";
-};
-
-const handleGenerateSuggestions = () => {
-	suggestionsStore.generateSuggestions(sceneManager.hub);
-};
-
 const handleRemoveSuggestion = (id: string) => {
 	suggestionsStore.removeSuggestion(id);
 };
@@ -72,19 +55,6 @@ const handleRemoveSuggestion = (id: string) => {
 
 <template>
 	<div class="flex flex-col gap-4 h-full">
-		<div class="flex items-center justify-between">
-			<h2 class="text-lg font-semibold">AI Suggestions</h2>
-			<Button
-				@click="handleGenerateSuggestions"
-				size="sm"
-				variant="default"
-				class="gap-2"
-			>
-				<Sparkles class="w-4 h-4" />
-				Generate
-			</Button>
-		</div>
-
 		<div class="flex-1 overflow-y-auto space-y-3">
 			<Card
 				v-for="suggestion in suggestionsStore.suggestions"

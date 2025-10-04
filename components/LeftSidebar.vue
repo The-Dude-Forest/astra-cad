@@ -10,8 +10,10 @@ import LayoutManager from "@/components/LayoutManager.vue";
 import AISuggestions from "@/components/AISuggestions.vue";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useSceneManager } from "@/stores/scene-manager";
+import { useAISuggestions } from "@/stores/ai-suggestions";
 
 const sceneManager = useSceneManager();
+const suggestionsStore = useAISuggestions();
 
 function addFloor() {
 	const newLevel = sceneManager.hub.floors.length;
@@ -21,8 +23,13 @@ function addFloor() {
 		volume: 100,
 		acceptedItemTypes: [],
 		items: [],
+		modelUrl: "models/giriskati.glb",
 	});
 }
+
+const handleGenerateSuggestions = () => {
+	suggestionsStore.generateSuggestions(sceneManager.hub);
+};
 </script>
 
 <template>
@@ -35,20 +42,31 @@ function addFloor() {
 		</div>
 		<div class="flex-1">
 			<ResizablePanelGroup direction="vertical">
-				<ResizablePanel :default-size="25" :min-size="10" :max-size="50">
-					<div class="h-full w-full bg-background p-4">
-						<h2 class="text-lg font-semibold mb-2 text-foreground">
-							AI Suggestions
-						</h2>
+				<ResizablePanel :default-size="50" :min-size="20" :max-size="75">
+					<div class="h-full w-full bg-background py-4">
+						<div class="px-4 flex items-center justify-between w-full">
+							<h2 class="text-lg font-semibold mb-2 text-foreground">
+								AI Suggestions
+							</h2>
+							<Button
+								size="sm"
+								variant="default"
+								class="gap-2"
+								@click="handleGenerateSuggestions"
+							>
+								<Sparkles class="w-4 h-4" />
+								Generate
+							</Button>
+						</div>
+						<ScrollArea class="h-full px-4 mt-4">
+							<AISuggestions />
+						</ScrollArea>
 					</div>
-					<ScrollArea class="h-full">
-						<AISuggestions />
-					</ScrollArea>
 				</ResizablePanel>
 
 				<ResizableHandle :with-handle="true" />
 
-				<ResizablePanel :default-size="75" :min-size="20">
+				<ResizablePanel :default-size="50" :min-size="20">
 					<div class="h-full w-full bg-background py-4">
 						<div class="px-4 flex items-center justify-between w-full">
 							<h2 class="text-lg font-semibold mb-2 text-foreground">

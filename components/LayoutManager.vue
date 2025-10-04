@@ -16,9 +16,12 @@ import { Layers, Package, Plus, Trash2 } from "lucide-vue-next";
 
 const sceneManager = useSceneManager();
 
-const accordionValue = ref(`floor-${sceneManager.selectedFloor}`);
+const accordionValue = ref(
+	sceneManager.selectedFloor >= 0
+		? `floor-${sceneManager.selectedFloor}`
+		: undefined
+);
 
-// Computed property to sort floors from top to bottom (highest level first)
 const sortedFloors = computed(() => {
 	return [...sceneManager.hub.floors].sort((a, b) => b.level - a.level);
 });
@@ -29,13 +32,19 @@ watch(accordionValue, (newValue) => {
 		if (!isNaN(floorLevel)) {
 			sceneManager.selectedFloor = floorLevel;
 		}
+	} else {
+		sceneManager.selectedFloor = -1;
 	}
 });
 
 watch(
 	() => sceneManager.selectedFloor,
 	(newFloor) => {
-		accordionValue.value = `floor-${newFloor}`;
+		if (newFloor >= 0) {
+			accordionValue.value = `floor-${newFloor}`;
+		} else {
+			accordionValue.value = undefined;
+		}
 	}
 );
 
