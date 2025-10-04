@@ -19,7 +19,13 @@ export type Item = {
 export type Floor = {
 	level: number;
 	volume?: number;
+	offset?: {
+		x?: number;
+		y?: number;
+		z?: number;
+	};
 	type: string;
+	modelUrl: string;
 	acceptedItemTypes: ItemType[];
 	items: Item[];
 };
@@ -41,6 +47,7 @@ export const useSceneManager = defineStore(
 			floors: [
 				{
 					level: 0,
+					modelUrl: "models/giriskati.glb",
 					type: "ground",
 					volume: 500,
 					acceptedItemTypes: ["lab", "power"],
@@ -48,7 +55,7 @@ export const useSceneManager = defineStore(
 						{
 							title: "Fusion Lab",
 							desc: "Handles experimental energy reactions.",
-							modelUrl: "/models/fusion-lab.glb",
+							modelUrl: "models/fusion-lab.glb",
 							imgUrl: "/images/fusion-lab.png",
 							x: 10,
 							y: 0,
@@ -60,7 +67,7 @@ export const useSceneManager = defineStore(
 						{
 							title: "Power Core",
 							desc: "Provides sustainable energy for the facility.",
-							modelUrl: "/models/power-core.glb",
+							modelUrl: "models/power-core.glb",
 							imgUrl: "/images/power-core.png",
 							x: -8,
 							y: 0,
@@ -73,9 +80,38 @@ export const useSceneManager = defineStore(
 				},
 				{
 					level: 1,
+					modelUrl: "models/kat1_kapisiz.glb",
 					type: "upper",
 					volume: 300,
 					acceptedItemTypes: ["lab"],
+					offset: {
+						x: 2.52,
+						y: 0,
+						z: 1.75,
+					},
+					items: [
+						{
+							title: "Bio Lab",
+							desc: "Focuses on organic sample research.",
+							modelUrl: "/models/bio-lab.glb",
+							imgUrl: "/images/bio-lab.png",
+							x: 2,
+							y: 10,
+							z: 7,
+							type: "lab",
+							volume: 100,
+						},
+					],
+				},
+				{
+					level: 2,
+					modelUrl: "models/kat_dome.glb",
+					type: "upper",
+					volume: 300,
+					acceptedItemTypes: ["lab"],
+					offset: {
+						x: 0.78,
+					},
 					items: [
 						{
 							title: "Bio Lab",
@@ -93,7 +129,7 @@ export const useSceneManager = defineStore(
 			],
 		});
 
-		const selectedFloor = ref<number>(0);
+		const selectedFloor = ref<number>(-1);
 
 		return { hub, selectedFloor };
 	},
