@@ -43,7 +43,7 @@ const handleGenerateSuggestions = () => {
 		<div class="flex-1">
 			<ResizablePanelGroup direction="vertical">
 				<ResizablePanel :default-size="50" :min-size="20" :max-size="75">
-					<div class="h-full w-full bg-background py-4">
+					<div class="h-full w-full py-4 bg-background">
 						<div class="px-4 flex items-center justify-between w-full">
 							<h2 class="text-lg font-semibold mb-2 text-foreground">
 								AI Suggestions
