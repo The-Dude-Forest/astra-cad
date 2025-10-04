@@ -11,7 +11,7 @@
           width="100"
           height="100"
           :src="`${config.public.baseURL}lunartexture1.webp`"
-        ></a-plane>
+        />
 
         <a-sky :src="`${config.public.baseURL}stars.jpg`" radius="1200" />
 

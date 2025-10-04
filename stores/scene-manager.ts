@@ -34,7 +34,64 @@ export type Hub = {
 export const useSceneManager = defineStore(
 	"SceneManager",
 	() => {
-		const hub = ref<Hub>();
+		const hub = ref<Hub>({
+			title: "Main Research Hub",
+			desc: "A futuristic multi-floor hub for energy and lab experiments.",
+			author: "Admin",
+			floors: [
+				{
+					level: 0,
+					type: "ground",
+					volume: 500,
+					acceptedItemTypes: ["lab", "power"],
+					items: [
+						{
+							title: "Fusion Lab",
+							desc: "Handles experimental energy reactions.",
+							modelUrl: "/models/fusion-lab.glb",
+							imgUrl: "/images/fusion-lab.png",
+							x: 10,
+							y: 0,
+							z: 5,
+							type: "lab",
+							orientation: 90,
+							volume: 120,
+						},
+						{
+							title: "Power Core",
+							desc: "Provides sustainable energy for the facility.",
+							modelUrl: "/models/power-core.glb",
+							imgUrl: "/images/power-core.png",
+							x: -8,
+							y: 0,
+							z: 3,
+							type: "power",
+							orientation: 45,
+							volume: 80,
+						},
+					],
+				},
+				{
+					level: 1,
+					type: "upper",
+					volume: 300,
+					acceptedItemTypes: ["lab"],
+					items: [
+						{
+							title: "Bio Lab",
+							desc: "Focuses on organic sample research.",
+							modelUrl: "/models/bio-lab.glb",
+							imgUrl: "/images/bio-lab.png",
+							x: 2,
+							y: 10,
+							z: 7,
+							type: "lab",
+							volume: 100,
+						},
+					],
+				},
+			],
+		});
 		return { hub };
 	},
 	{

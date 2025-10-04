@@ -4,14 +4,13 @@ import {
 	ResizablePanel,
 	ResizableHandle,
 } from "@/components/ui/resizable";
-import Viewport3D from "./Viewport3D.vue";
 import Terminal from "./Terminal.vue";
 </script>
 
 <template>
 	<ResizablePanelGroup direction="vertical">
 		<ResizablePanel :default-size="75" :min-size="30">
-			<Viewport3D />
+			<SceneView />
 		</ResizablePanel>
 
 		<ResizableHandle :with-handle="true" />
