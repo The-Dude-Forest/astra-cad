@@ -34,7 +34,7 @@ const handleGenerateSuggestions = () => {
 
 <template>
 	<div class="h-full w-full bg-background flex flex-col">
-		<div class="p-4 border-b border-border">
+		<div class="border-b border-border h-16 flex items-center px-4">
 			<div class="flex items-center gap-2">
 				<Sparkles class="h-6 w-6 text-primary" />
 				<h1 class="text-xl font-bold text-foreground">AstraCAD</h1>
@@ -43,25 +43,28 @@ const handleGenerateSuggestions = () => {
 		<div class="flex-1">
 			<ResizablePanelGroup direction="vertical">
 				<ResizablePanel :default-size="50" :min-size="20" :max-size="75">
-					<div class="h-full w-full py-4 bg-background">
-						<div class="px-4 flex items-center justify-between w-full">
-							<h2 class="text-lg font-semibold mb-2 text-foreground">
-								AI Suggestions
-							</h2>
-							<Button
-								size="sm"
-								variant="default"
-								class="gap-2"
-								@click="handleGenerateSuggestions"
+					<ScrollArea class="h-full w-full bg-background p-4">
+						<div class="h-full w-full bg-background">
+							<div
+								class="text-lg font-semibold mb-2 text-foreground sticky top-0 w-full py-2 bg-background flex items-center justify-between"
 							>
-								<Sparkles class="w-4 h-4" />
-								Generate
-							</Button>
-						</div>
-						<ScrollArea class="h-full px-4 mt-4">
+								<h2 class="text-lg font-semibold text-foreground">
+									AI Suggestions
+								</h2>
+								<Button
+									size="sm"
+									variant="default"
+									class="gap-2"
+									@click="handleGenerateSuggestions"
+								>
+									<Sparkles class="w-4 h-4" />
+									Generate
+								</Button>
+							</div>
+
 							<AISuggestions />
-						</ScrollArea>
-					</div>
+						</div>
+					</ScrollArea>
 				</ResizablePanel>
 
 				<ResizableHandle :with-handle="true" />

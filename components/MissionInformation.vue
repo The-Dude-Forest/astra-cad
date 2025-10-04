@@ -1,14 +1,12 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useSceneManager } from "@/stores/scene-manager";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Rocket, User, Building2, Package, Hash } from "lucide-vue-next";
+import { User, Building2, Package, Hash } from "lucide-vue-next";
 
 const sceneManager = useSceneManager();
 
-// Compute totals
 const totalItems = computed(() => {
 	return sceneManager.hub.floors.reduce(
 		(sum, floor) => sum + floor.items.length,
@@ -25,44 +23,26 @@ const totalVolume = computed(() => {
 </script>
 
 <template>
-	<div class="flex flex-col gap-4 h-full p-4">
-		<div class="flex items-center gap-2">
-			<Rocket class="h-5 w-5 text-primary" />
-			<h2 class="text-lg font-semibold">Mission Information</h2>
-		</div>
-
-		<Card>
-			<CardHeader class="pb-3">
-				<CardTitle class="text-base flex items-center gap-2">
-					<Building2 class="h-4 w-4" />
-					{{ sceneManager.hub.title }}
-				</CardTitle>
-			</CardHeader>
-			<CardContent class="space-y-4">
-				<!-- Description -->
-				<div class="space-y-1">
-					<p class="text-sm font-medium text-muted-foreground">Description</p>
-					<p class="text-sm">{{ sceneManager.hub.desc }}</p>
-				</div>
+	<div class="flex flex-col gap-4 h-full text-foreground">
+		<div class="space-y-2">
+			<div class="space-y-4">
+				<p class="text-sm text-muted-foreground">{{ sceneManager.hub.desc }}</p>
 
 				<Separator />
 
-				<!-- Mission Details List -->
 				<div class="space-y-3">
 					<p class="text-sm font-semibold">Mission Details</p>
 
-					<!-- Author -->
 					<div class="flex items-center justify-between text-sm">
 						<div class="flex items-center gap-2 text-muted-foreground">
 							<User class="h-4 w-4" />
 							<span>Author</span>
 						</div>
-						<Badge variant="secondary">{{
+						<Badge variant="outline">{{
 							sceneManager.hub.author || "Unknown"
 						}}</Badge>
 					</div>
 
-					<!-- Floors -->
 					<div class="flex items-center justify-between text-sm">
 						<div class="flex items-center gap-2 text-muted-foreground">
 							<Building2 class="h-4 w-4" />
@@ -73,7 +53,6 @@ const totalVolume = computed(() => {
 						}}</Badge>
 					</div>
 
-					<!-- Total Items -->
 					<div class="flex items-center justify-between text-sm">
 						<div class="flex items-center gap-2 text-muted-foreground">
 							<Package class="h-4 w-4" />
@@ -120,7 +99,7 @@ const totalVolume = computed(() => {
 						</div>
 					</div>
 				</div>
-			</CardContent>
-		</Card>
+			</div>
+		</div>
 	</div>
 </template>
