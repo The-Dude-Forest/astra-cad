@@ -1,13 +1,19 @@
 export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
-  devtools: { enabled: true },
+  devtools: { enabled: false },
   modules: [
     "@nuxt/eslint",
     "@nuxt/fonts",
     "@nuxt/icon",
     "@nuxtjs/tailwindcss",
     "shadcn-nuxt",
-    "shadcn-nuxt",
+    "@pinia/nuxt",
+    [
+      "pinia-plugin-persistedstate/nuxt",
+      {
+        storage: "localStorage",
+      },
+    ],
   ],
   app: {
     baseURL: "",
