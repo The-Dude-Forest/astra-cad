@@ -41,7 +41,6 @@ export const useSceneManager = defineStore(
     persist: [
       {
         pick: ["hub"],
-        storage: localStorage,
       },
     ],
   },
