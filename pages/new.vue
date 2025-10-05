@@ -36,7 +36,9 @@ const totalSteps = 3;
 // Mission parameters
 const crewSize = ref(4);
 const missionDays = ref(30);
-const objective = ref("");
+const objective = ref(
+	"Establish a permanent research outpost for long-term habitation studies"
+);
 
 // AI-generated content for title/description
 const isGeneratingInfo = ref(false);
@@ -45,9 +47,6 @@ const hasGeneratedInfo = ref(false);
 // User can edit AI-generated content
 const missionTitle = ref("");
 const missionDescription = ref("");
-
-// Hub generation
-const isGeneratingHub = ref(false);
 
 // Computed
 const canProceedStep1 = computed(() => {
@@ -114,11 +113,6 @@ async function generateMissionInfo() {
 
 			hasGeneratedInfo.value = true;
 			currentStep.value = 3;
-
-			toast.success("Mission details generated!", {
-				position: "top-right",
-				description: "Review and edit as needed, then launch your mission.",
-			});
 		}
 	} catch (error) {
 		console.error("Error generating mission info:", error);
@@ -131,48 +125,27 @@ async function generateMissionInfo() {
 	}
 }
 
-async function createMission() {
+function createMission() {
 	if (!canProceedStep3.value) return;
 
-	isGeneratingHub.value = true;
+	// Create empty hub structure
+	sceneManager.hub = {
+		title: missionTitle.value,
+		desc: missionDescription.value,
+		author: "Mission Control",
+		floors: [],
+	};
 
-	try {
-		// Generate the hub layout
-		const response = await $fetch("/api/generate-hub", {
-			method: "POST",
-			body: {
-				crewSize: crewSize.value,
-				missionDays: missionDays.value,
-				objective: objective.value,
-				title: missionTitle.value,
-				description: missionDescription.value,
-				availableItems: sceneManager.items,
-			},
-		});
+	// Set selected floor to -1 (no floor selected)
+	sceneManager.selectedFloor = -1;
 
-		if (response.success) {
-			// Store the generated hub
-			sceneManager.hub = response.hub;
+	toast.success("Mission launched successfully!", {
+		position: "top-right",
+		description: "Your mission is ready. Start building your lunar base!",
+	});
 
-			// Set first floor as selected
-			sceneManager.selectedFloor = 0;
-
-			toast.success("Mission launched successfully!", {
-				position: "top-right",
-				description: `Created ${response.stats.totalFloors} floor(s) with ${response.stats.totalItems} items.`,
-			});
-
-			// Redirect to main page
-			router.push("/");
-		}
-	} catch (error) {
-		console.error("Error generating hub:", error);
-		toast.error("Failed to generate base layout", {
-			position: "top-right",
-			description: "Please try again.",
-		});
-		isGeneratingHub.value = false;
-	}
+	// Redirect to main page
+	router.push("/");
 }
 </script>
 
@@ -311,7 +284,7 @@ async function createMission() {
 						<div
 							class="border border-border rounded-lg p-4 bg-background space-y-2"
 						>
-							<div class="flex items-start gap-2">
+							<div class="flex items-start gap-2 flex-col md:flex-row">
 								<Info class="size-5 text-primary" />
 								<div class="space-y-1">
 									<p class="text-sm font-medium">Mission Preview</p>
@@ -353,9 +326,9 @@ Examples:
 
 						<div
 							v-if="objective.length > 0"
-							class="border border-border rounded-lg p-4 bg-muted/30 space-y-2"
+							class="border border-border rounded-lg p-4 bg-background space-y-2"
 						>
-							<div class="flex items-start gap-2">
+							<div class="flex items-start gap-2 flex-col md:flex-row">
 								<Sparkles class="size-5 text-primary" />
 								<div class="space-y-1">
 									<p class="text-sm font-medium">AI Will Generate</p>
@@ -420,16 +393,16 @@ Examples:
 							</div>
 
 							<div
-								class="border border-primary/50 rounded-lg p-4 bg-primary/5 space-y-3"
+								class="border border-border rounded-lg p-4 bg-background space-y-3"
 							>
-								<div class="flex items-start gap-2">
+								<div class="flex items-start gap-2 flex-col md:flex-row">
 									<CheckCircle class="size-5 text-primary mt-0.5" />
 									<div class="space-y-2 flex-1">
 										<p class="text-sm font-medium">Ready to Launch</p>
 										<p class="text-xs text-muted-foreground">
-											AI will design a complete {{ crewSize }}-person lunar base
-											for your {{ missionDays }}-day mission when you click
-											Launch Mission.
+											Your mission is configured for {{ crewSize }} crew members
+											over {{ missionDays }} days. Click Launch Mission to start
+											building your lunar base.
 										</p>
 									</div>
 								</div>
@@ -440,7 +413,7 @@ Examples:
 
 				<CardFooter class="flex justify-between">
 					<Button
-						v-if="currentStep > 1 && !isGeneratingInfo && !isGeneratingHub"
+						v-if="currentStep > 1 && !isGeneratingInfo"
 						variant="outline"
 						@click="prevStep"
 					>
@@ -466,16 +439,11 @@ Examples:
 					<Button
 						v-else
 						class="bg-primary hover:bg-primary/90"
-						:disabled="!canProceed || isGeneratingHub"
+						:disabled="!canProceed"
 						@click="createMission"
 					>
-						<Icon
-							v-if="isGeneratingHub"
-							name="lucide:loader-2"
-							class="size-4 mr-2 animate-spin"
-						/>
-						<Rocket v-else class="size-4 mr-2" />
-						{{ isGeneratingHub ? "Launching..." : "Launch Mission" }}
+						<Rocket class="size-4 mr-2" />
+						Launch Mission
 					</Button>
 				</CardFooter>
 			</Card>

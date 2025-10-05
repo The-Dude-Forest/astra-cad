@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
-import { useRouter } from "vue-router";
 import {
 	ResizablePanelGroup,
 	ResizablePanel,
@@ -9,27 +7,14 @@ import {
 import LeftSidebar from "@/components/LeftSidebar.vue";
 import RightSidebar from "@/components/RightSidebar.vue";
 import MainContent from "@/components/MainContent.vue";
-import { useSceneManager } from "@/stores/scene-manager";
+import { useIsMobile } from "@/composables/useIsMobile";
 
-const router = useRouter();
-const sceneManager = useSceneManager();
-
-// Check if hub exists in localStorage on mount
-onMounted(() => {
-	// Check if hub exists and has floors
-	if (
-		!sceneManager.hub ||
-		!sceneManager.hub.floors ||
-		sceneManager.hub.floors.length === 0
-	) {
-		router.push("/new");
-	}
-});
+const { isMobile } = useIsMobile();
 </script>
 
 <template>
 	<div class="h-screen w-screen overflow-hidden bg-background">
-		<ResizablePanelGroup direction="horizontal">
+		<ResizablePanelGroup v-if="!isMobile" direction="horizontal">
 			<ResizablePanel :default-size="25" :min-size="0" :max-size="30">
 				<LeftSidebar />
 			</ResizablePanel>
@@ -46,5 +31,8 @@ onMounted(() => {
 				<RightSidebar />
 			</ResizablePanel>
 		</ResizablePanelGroup>
+
+		<!-- Mobile Layout: Only MainContent (navbar, terminal, and scene view) -->
+		<MainContent v-else />
 	</div>
 </template>

@@ -344,9 +344,6 @@ const applyProposedChanges = (messageId, partIndex, data) => {
 		return;
 	}
 
-	const confirmMsg = `Apply ${data.changes.length} change(s) to your lunar base?\n\n${data.explanation}`;
-	if (!confirm(confirmMsg)) return;
-
 	try {
 		data.changes.forEach((change) => {
 			const floor = sceneStore.hub.floors.find(
@@ -404,6 +401,7 @@ const applyProposedChanges = (messageId, partIndex, data) => {
 
 		// Mark proposal as applied in chat store
 		chatStore.markProposalAsApplied(messageId, partIndex);
+		suggestionsStore.generateSuggestions(sceneStore.hub);
 	} catch (error) {
 		console.error("Error applying changes:", error);
 		alert("Failed to apply changes. Check console for details.");
