@@ -34,6 +34,7 @@ const accordionValue = ref(
 );
 
 const sortedFloors = computed(() => {
+	if (!sceneManager.hub) return [];
 	return sceneManager.hub.floors.sort((a, b) => b.level - a.level);
 });
 
@@ -60,6 +61,7 @@ watch(
 );
 
 function updateFloorType(floorLevel: number, value: FloorType) {
+	if (!sceneManager.hub) return;
 	const floor = sceneManager.hub.floors.find((f) => f.level === floorLevel);
 	if (floor) {
 		floor.type = value;
@@ -69,6 +71,7 @@ function updateFloorType(floorLevel: number, value: FloorType) {
 }
 
 function updateFloorVolume(floorLevel: number, value: number) {
+	if (!sceneManager.hub) return;
 	const floor = sceneManager.hub.floors.find((f) => f.level === floorLevel);
 	if (floor) {
 		floor.volume = value;
@@ -78,6 +81,7 @@ function updateFloorVolume(floorLevel: number, value: number) {
 }
 
 function removeItem(floorLevel: number, itemIndex: number) {
+	if (!sceneManager.hub) return;
 	const floor = sceneManager.hub.floors.find((f) => f.level === floorLevel);
 	if (floor) {
 		floor.items.splice(itemIndex, 1);
@@ -87,6 +91,7 @@ function removeItem(floorLevel: number, itemIndex: number) {
 }
 
 function removeFloor(floorLevel: number) {
+	if (!sceneManager.hub) return;
 	if (sceneManager.hub.floors.length > 1) {
 		const floorIndex = sceneManager.hub.floors.findIndex(
 			(f) => f.level === floorLevel

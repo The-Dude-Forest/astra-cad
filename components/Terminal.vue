@@ -87,6 +87,7 @@ const filterSearch = ref("all");
 const suggestionsStore = useAISuggestions();
 
 const handleItemSelection = (item: Item) => {
+	if (!hub.value) return;
 	const index = hub.value.floors.findIndex(
 		(e) => e.level === selectedFloor.value
 	);

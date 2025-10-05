@@ -831,6 +831,7 @@ export const useSceneManager = defineStore(
 			playMode,
 			calculateFloorVolumePercentage,
 			savedHub,
+			communityHubs,
 		};
 	},
 	{
