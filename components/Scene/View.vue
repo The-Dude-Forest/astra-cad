@@ -22,7 +22,7 @@
 		<Button
 			v-if="drawerOpen !== undefined"
 			size="icon"
-			class="absolute bottom-4 left-4 z-10 rounded-full w-12 h-12 shadow-md"
+			class="absolute top-4 right-4 z-10 rounded-full w-12 h-12 shadow-md"
 			@click="toggleDrawer"
 		>
 			<Plus class="w-5 h-5" />
