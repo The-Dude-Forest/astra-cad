@@ -25,7 +25,7 @@ export default defineNuxtConfig({
 		fallback: "dark",
 	},
 	app: {
-		baseURL: "",
+		baseURL: "/",
 		head: {
 			title: "AstraCAD",
 			meta: [
