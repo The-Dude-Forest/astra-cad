@@ -21,8 +21,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { Drawer } from "@/components/ui/drawer";
-import MobileDrawerContent from "./MobileDrawerContent.vue";
+import { Drawer, DrawerContent } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import Terminal from "./Terminal.vue";
@@ -94,6 +93,12 @@ const addNewFloor = () => {
 	});
 
 	selectedFloor.value = newLevel;
+};
+
+// Drawer state for mobile
+const drawerOpen = ref(false);
+const toggleDrawer = () => {
+	drawerOpen.value = !drawerOpen.value;
 };
 </script>
 
@@ -243,30 +248,29 @@ const addNewFloor = () => {
 
 		<!-- Mobile Layout with Drawer -->
 		<div v-else class="flex-1 overflow-hidden relative">
-			<div class="h-full w-full">
-				<SceneView :key="key" />
-			</div>
+			<Drawer v-model:open="drawerOpen" :should-scale-background="false">
+				<div class="h-full w-full">
+					<SceneView
+						:key="key"
+						:drawer-open="drawerOpen"
+						@toggle-drawer="toggleDrawer"
+					/>
+				</div>
 
-			<Drawer
-				:open="true"
-				:modal="false"
-				:dismissible="false"
-				:should-scale-background="false"
-			>
-				<MobileDrawerContent class="border-t">
+				<DrawerContent class="h-[60vh] flex flex-col">
 					<div
-						class="w-12 h-1.5 bg-muted-foreground/40 rounded-full mx-auto mb-4 mt-2 cursor-grab active:cursor-grabbing"
+						class="w-12 h-1.5 bg-muted-foreground/40 rounded-full mx-auto mb-4 mt-2 flex-shrink-0"
 					/>
 					<div
 						v-auto-animate
-						class="flex justify-center items-center px-4 pb-4 max-h-[50vh] overflow-y-auto"
+						class="flex-1 flex justify-center items-center overflow-hidden"
 					>
-						<Terminal v-if="selectedFloor !== -1" />
-						<Label v-else class="text-lg text-white">
+						<Terminal v-if="selectedFloor !== -1" class="h-full w-full" />
+						<Label v-else class="text-lg text-foreground">
 							Please select a level to view available items...
 						</Label>
 					</div>
-				</MobileDrawerContent>
+				</DrawerContent>
 			</Drawer>
 		</div>
 	</div>

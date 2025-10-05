@@ -15,8 +15,18 @@
 			:step="0.2"
 			:min="-5"
 			:model-value="[zoom]"
-			@update:model-value="(e) => (zoom = e[0])"
+			@update:model-value="(e) => e && (zoom = e[0])"
 		/>
+
+		<!-- Drawer Toggle Button -->
+		<Button
+			v-if="drawerOpen !== undefined"
+			size="icon"
+			class="absolute bottom-4 left-4 z-10 rounded-full w-12 h-12 shadow-md"
+			@click="toggleDrawer"
+		>
+			<Plus class="w-5 h-5" />
+		</Button>
 		<a-scene :key="`${selectedFloor}${playMode}`" embedded>
 			<a-plane
 				position="0 -0.1 -4"
@@ -84,8 +94,10 @@
 </template>
 
 <script setup lang="ts">
+import { Plus } from "lucide-vue-next";
 import { useSceneManager } from "@/stores/scene-manager";
 import { storeToRefs } from "pinia";
+
 const sceneManager = useSceneManager();
 const { hub, selectedFloor, playMode } = storeToRefs(sceneManager);
 
@@ -96,4 +108,18 @@ watch(selectedFloor, () => {
 });
 
 const config = useRuntimeConfig();
+
+// Drawer toggle props
+const props = defineProps({
+	drawerOpen: {
+		type: Boolean,
+		default: undefined,
+	},
+});
+
+const emit = defineEmits(["toggleDrawer"]);
+
+const toggleDrawer = () => {
+	emit("toggleDrawer");
+};
 </script>
