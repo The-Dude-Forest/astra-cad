@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Save, SquareStop, Play, SquareArrowOutUpLeft } from "lucide-vue-next";
+import { Share, SquareStop, Play, SquareArrowOutUpLeft } from "lucide-vue-next";
 import {
 	ResizablePanelGroup,
 	ResizablePanel,
@@ -9,17 +9,17 @@ import { Button } from "@/components/ui/button";
 import Terminal from "./Terminal.vue";
 import { useSceneManager } from "@/stores/scene-manager";
 import { storeToRefs } from "pinia";
+import { toast } from "vue-sonner";
 
 const key = ref(0);
 onMounted(() => (key.value = 1));
-
-const handleSave = () => {
-	// TODO: Implement save functionality
-};
-
 const sceneManager = useSceneManager();
+const { selectedFloor, playMode, hub, savedHub } = storeToRefs(sceneManager);
+const { SaveLayout } = sceneManager;
 
-const { selectedFloor, playMode } = storeToRefs(sceneManager);
+const handleShare = async () => {
+	await SaveLayout();
+};
 
 function getPercentageColor(percentage: number) {
 	if (percentage > 75) return "text-red-500";
@@ -76,9 +76,9 @@ const floorVolume = computed(() => {
 							Community
 						</Button>
 					</NuxtLink>
-					<Button @click="handleSave">
-						<Save class="w-4 h-4" />
-						Save
+					<Button @click="handleShare()">
+						<Share class="w-4 h-4" />
+						Share
 					</Button>
 
 					<Button

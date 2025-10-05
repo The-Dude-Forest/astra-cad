@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
+import { toast } from "vue-sonner";
 
 export type ItemType =
 	| "command"
@@ -766,6 +767,8 @@ export const useSceneManager = defineStore(
 
 		const playMode = ref<boolean>(false);
 
+		const savedHub = ref<Hub>();
+
 		const selectedFloor = ref<number>(-1);
 
 		function calculateFloorVolumePercentage(floorNumber: number) {
@@ -794,13 +797,62 @@ export const useSceneManager = defineStore(
 			return (totalVolume / floor.volume) * 100;
 		}
 
+		const baseApiUrl = "https://astra-cad-api.yomuhoudai.club";
+
+		const SaveLayout = (): Promise<any> => {
+			const fetcher = $fetch.create({
+				baseURL: baseApiUrl,
+				onResponse({ response }) {
+					if (!response.ok) return;
+					toast.success(response._data.message, {
+						position: "top-right",
+					});
+				},
+				onResponseError({ response }) {
+					toast.error(response._data.message, {
+						position: "top-right",
+					});
+				},
+			});
+			return fetcher("/save-layout", {
+				method: "POST",
+				body: hub.value,
+			});
+		};
+
+		const communityHubs = ref<Hub[]>([]);
+
+		const GetLayouts = (): Promise<any> => {
+			const fetcher = $fetch.create({
+				baseURL: baseApiUrl,
+				onResponse({ response }) {
+					if (!response.ok) return;
+					communityHubs.value = response._data.data;
+					toast.success(response._data.message, {
+						position: "top-right",
+					});
+				},
+				onResponseError({ response }) {
+					toast.error(response._data.message, {
+						position: "top-right",
+					});
+				},
+			});
+			return fetcher("/layouts", {
+				method: "GET",
+			});
+		};
+
 		return {
+			SaveLayout,
+			GetLayouts,
 			hub,
 			selectedFloor,
 			items,
 			selectedItem,
 			playMode,
 			calculateFloorVolumePercentage,
+			savedHub,
 		};
 	},
 	{

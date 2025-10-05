@@ -2,7 +2,7 @@
 	<main class="text-white font-bold w-full h-full relative">
 		<Label
 			v-if="selectedFloor !== -1"
-			class="translate-y-2 text-xl absolute bottom-6 w-[100px] text-center z-10 left-12"
+			class="-translate-y-3 text-xl absolute top-6 w-[100px] text-center z-10 left-12"
 			for="zoom"
 		>
 			Zoom:</Label
@@ -10,7 +10,7 @@
 		<Slider
 			v-if="selectedFloor !== -1"
 			id="zoom"
-			class="absolute bottom-6 w-[100px] z-10 left-28"
+			class="absolute top-6 w-[100px] z-10 left-28"
 			:max="6"
 			:step="0.2"
 			:min="-5"
