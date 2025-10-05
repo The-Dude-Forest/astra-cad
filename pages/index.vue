@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { onMounted } from "vue";
+import { useRouter } from "vue-router";
 import {
 	ResizablePanelGroup,
 	ResizablePanel,
@@ -7,6 +9,22 @@ import {
 import LeftSidebar from "@/components/LeftSidebar.vue";
 import RightSidebar from "@/components/RightSidebar.vue";
 import MainContent from "@/components/MainContent.vue";
+import { useSceneManager } from "@/stores/scene-manager";
+
+const router = useRouter();
+const sceneManager = useSceneManager();
+
+// Check if hub exists in localStorage on mount
+onMounted(() => {
+	// Check if hub exists and has floors
+	if (
+		!sceneManager.hub ||
+		!sceneManager.hub.floors ||
+		sceneManager.hub.floors.length === 0
+	) {
+		router.push("/new");
+	}
+});
 </script>
 
 <template>

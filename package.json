@@ -50,9 +50,8 @@
 		"vue-sonner": "^2.0.9",
 		"zod": "^4.1.11"
 	},
-	"packageManager": "pnpm@10.18.0",
 	"engines": {
-		"node": "23.11.0"
+		"node": "22.x"
 	},
 	"devDependencies": {
 		"@nuxt/icon": "2.0.0",

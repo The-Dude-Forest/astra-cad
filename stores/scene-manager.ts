@@ -740,31 +740,7 @@ export const useSceneManager = defineStore(
 			},
 		]);
 
-		const hub = ref<Hub>({
-			title: "Lunar Research Hub",
-			desc: "A modular lunar base for crewed operations and research.",
-			author: "Mission Control",
-			floors: [
-				{
-					level: 0,
-					modelUrl: "models/lunar_base_main.glb",
-					type: "inflatable",
-					volume: 500,
-					acceptedItemTypes: [
-						"command",
-						"crew",
-						"life-support",
-						"airlock",
-						"medical",
-						"galley",
-						"storage",
-						"utility",
-						"infrastructure",
-					],
-					items: items.value,
-				},
-			],
-		});
+		const hub = ref<Hub>();
 
 		const playMode = ref<boolean>(false);
 
@@ -773,6 +749,7 @@ export const useSceneManager = defineStore(
 		const selectedFloor = ref<number>(-1);
 
 		function calculateFloorVolumePercentage(floorNumber: number) {
+			if (!hub.value) return 0;
 			if (floorNumber === -1) {
 				// Return total hub's volume percentage
 				const totalVolume = hub.value.floors.reduce(
