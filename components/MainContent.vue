@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import {
 	Save,
-	SquareArrowOutUpLeft,
+	SquareStop,
+	Play,
 	AlertCircle,
 	AlertTriangle,
+	SquareArrowOutUpLeft,
 } from "lucide-vue-next";
 import {
 	ResizablePanelGroup,
@@ -25,7 +27,7 @@ const handleSave = () => {
 
 const sceneManager = useSceneManager();
 
-const { selectedFloor } = storeToRefs(sceneManager);
+const { selectedFloor, playMode } = storeToRefs(sceneManager);
 
 const suggestionsStore = useAISuggestions();
 
@@ -103,6 +105,25 @@ const warns = computed(() => {
 					<Button @click="handleSave">
 						<Save class="w-4 h-4" />
 						Save
+					</Button>
+
+					<Button
+						v-if="!playMode"
+						:disabled="selectedFloor === -1"
+						class="bg-green-600 hover:bg-green-400"
+						@click="playMode = true"
+					>
+						<Play class="pointer-events-none w-4 h-4" />
+						Play
+					</Button>
+
+					<Button
+						v-if="playMode"
+						class="bg-red-600 hover:bg-red-400"
+						@click="playMode = false"
+					>
+						<SquareStop class="pointer-events-none w-4 h-4" />
+						Stop
 					</Button>
 				</div>
 			</div>
