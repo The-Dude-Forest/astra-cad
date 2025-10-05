@@ -264,6 +264,50 @@ export const useAISuggestions = defineStore(
 				timestamp: Date.now(),
 			});
 
+			// Check crew size and non-utilized space requirement
+			const crewSize = hub.floors.reduce(
+				(sum, floor) =>
+					sum +
+					floor.items.filter((item) => item.title === "Sleeping Pod").length,
+				0
+			);
+
+			if (crewSize > 0) {
+				const totalVolume = hub.floors.reduce(
+					(sum, floor) => sum + (floor.volume || 0),
+					0
+				);
+				const totalSpaceUsed = hub.floors.reduce(
+					(sum, floor) =>
+						sum +
+						floor.items.reduce(
+							(itemSum, item) => itemSum + (item.volume || 0),
+							0
+						),
+					0
+				);
+				const nonUtilizedSpace = totalVolume - totalSpaceUsed;
+				const requiredNonUtilizedSpace = crewSize * 150;
+
+				if (nonUtilizedSpace < requiredNonUtilizedSpace) {
+					newSuggestions.push({
+						id: String(idCounter++),
+						type: "error",
+						title: "Insufficient Non-Utilized Space",
+						description: `Crew size is ${crewSize}, requiring ${requiredNonUtilizedSpace.toFixed(1)}m³ of non-utilized space (150m³ per crew). Current non-utilized space: ${nonUtilizedSpace.toFixed(1)}m³. Deficit: ${(requiredNonUtilizedSpace - nonUtilizedSpace).toFixed(1)}m³.`,
+						timestamp: Date.now(),
+					});
+				} else {
+					newSuggestions.push({
+						id: String(idCounter++),
+						type: "info",
+						title: "Adequate Non-Utilized Space",
+						description: `Non-utilized space of ${nonUtilizedSpace.toFixed(1)}m³ meets the requirement of ${requiredNonUtilizedSpace.toFixed(1)}m³ for ${crewSize} crew member${crewSize !== 1 ? "s" : ""} (150m³ per crew).`,
+						timestamp: Date.now(),
+					});
+				}
+			}
+
 			// Check for essential systems presence
 			const hasCommand = hub.floors.some((f) =>
 				f.items.some((i) => i.type === "command")

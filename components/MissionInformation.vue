@@ -54,6 +54,33 @@ const totalSpacePercentage = computed(() => {
 	return (totalSpaceUsed.value / totalVolume.value) * 100;
 });
 
+// Crew size (count sleeping pods)
+const crewSize = computed(() => {
+	if (!sceneManager.hub) return 0;
+	return sceneManager.hub.floors.reduce(
+		(sum, floor) =>
+			sum + floor.items.filter((item) => item.title === "Sleeping Pod").length,
+		0
+	);
+});
+
+// Non-utilized space
+const nonUtilizedSpace = computed(() => {
+	return totalVolume.value - totalSpaceUsed.value;
+});
+
+// Check if non-utilized space meets requirement (150m³ per crew)
+const requiredNonUtilizedSpace = computed(() => {
+	return crewSize.value * 150;
+});
+
+const nonUtilizedSpaceStatus = computed(() => {
+	if (crewSize.value === 0) return "neutral";
+	return nonUtilizedSpace.value >= requiredNonUtilizedSpace.value
+		? "good"
+		: "error";
+});
+
 // Total power consumption
 const totalPower = computed(() => {
 	if (!sceneManager.hub) return 0;
@@ -153,6 +180,14 @@ const hasErrors = computed(() => {
 
 					<div class="flex items-center justify-between text-sm">
 						<div class="flex items-center gap-2 text-muted-foreground">
+							<User class="h-4 w-4" />
+							<span>Crew Size</span>
+						</div>
+						<Badge variant="outline">{{ crewSize }}</Badge>
+					</div>
+
+					<div class="flex items-center justify-between text-sm">
+						<div class="flex items-center gap-2 text-muted-foreground">
 							<Building2 class="h-4 w-4" />
 							<span>Floors</span>
 						</div>
@@ -188,6 +223,33 @@ const hasErrors = computed(() => {
 								({{ totalSpacePercentage.toFixed(1) }}%)
 							</span>
 						</Badge>
+					</div>
+
+					<!-- Non-Utilized Space -->
+					<div class="flex items-center justify-between text-sm">
+						<div class="flex items-center gap-2 text-muted-foreground">
+							<Hash class="h-4 w-4" />
+							<span>Non-Utilized Space</span>
+						</div>
+						<div class="flex items-center gap-1">
+							<Badge
+								:variant="
+									nonUtilizedSpaceStatus === 'error' ? 'destructive' : 'outline'
+								"
+							>
+								{{ nonUtilizedSpace.toFixed(1) }} m³
+								<span
+									v-if="crewSize > 0"
+									class="ml-1 text-xs text-muted-foreground"
+								>
+									({{ requiredNonUtilizedSpace }} m³ required)
+								</span>
+							</Badge>
+							<AlertTriangle
+								v-if="nonUtilizedSpaceStatus === 'error'"
+								class="h-3 w-3 text-destructive"
+							/>
+						</div>
 					</div>
 
 					<!-- Total Power -->
