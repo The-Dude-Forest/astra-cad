@@ -73,7 +73,8 @@ import { Search } from "lucide-vue-next";
 const itemsFiltered = computed(() =>
 	items.value.filter(
 		(e) =>
-			e.title.toLowerCase().includes(search.value.toLowerCase()) &&
+			(e.desc?.toLowerCase().includes(search.value.toLowerCase()) ||
+				e.title.toLowerCase().includes(search.value.toLowerCase())) &&
 			(filterSearch.value === "all" ? true : filterSearch.value === e.type)
 	)
 );
@@ -84,9 +85,11 @@ const sceneManager = useSceneManager();
 const filterSearch = ref("all");
 
 const handleItemSelection = (item: Item) => {
-	hub.value.floors
-		.find((e) => e.level === selectedFloor.value)
-		?.items.push(item);
+	const index = hub.value.floors.findIndex(
+		(e) => e.level === selectedFloor.value
+	);
+	hub.value.floors[index].items.push(item);
+	console.log("hub", hub.value);
 };
 
 const { hub, selectedFloor, items, selectedItem } = storeToRefs(sceneManager);
