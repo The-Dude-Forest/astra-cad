@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {
-	Save,
+	Share,
 	SquareStop,
 	Play,
 	AlertCircle,
@@ -20,14 +20,13 @@ import { useAISuggestions } from "@/stores/ai-suggestions";
 
 const key = ref(0);
 onMounted(() => (key.value = 1));
-
-const handleSave = () => {
-	// TODO: Implement save functionality
-};
-
 const sceneManager = useSceneManager();
-
 const { selectedFloor, playMode } = storeToRefs(sceneManager);
+const { SaveLayout } = sceneManager;
+
+const handleShare = async () => {
+	await SaveLayout();
+};
 
 const suggestionsStore = useAISuggestions();
 
@@ -102,9 +101,9 @@ const warns = computed(() => {
 							Community
 						</Button>
 					</NuxtLink>
-					<Button @click="handleSave">
-						<Save class="w-4 h-4" />
-						Save
+					<Button @click="handleShare()">
+						<Share class="w-4 h-4" />
+						Share
 					</Button>
 
 					<Button
