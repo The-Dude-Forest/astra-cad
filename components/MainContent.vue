@@ -9,12 +9,11 @@ import { Button } from "@/components/ui/button";
 import Terminal from "./Terminal.vue";
 import { useSceneManager } from "@/stores/scene-manager";
 import { storeToRefs } from "pinia";
-import { toast } from "vue-sonner";
 
 const key = ref(0);
 onMounted(() => (key.value = 1));
 const sceneManager = useSceneManager();
-const { selectedFloor, playMode, hub, savedHub } = storeToRefs(sceneManager);
+const { selectedFloor, playMode } = storeToRefs(sceneManager);
 const { SaveLayout } = sceneManager;
 
 const handleShare = async () => {
