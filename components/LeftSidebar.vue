@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Sparkles, Plus } from "lucide-vue-next";
+import { Plus } from "lucide-vue-next";
 import {
 	ResizablePanelGroup,
 	ResizablePanel,
@@ -10,26 +10,20 @@ import LayoutManager from "@/components/LayoutManager.vue";
 import AISuggestions from "@/components/AISuggestions.vue";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useSceneManager } from "@/stores/scene-manager";
-import { useAISuggestions } from "@/stores/ai-suggestions";
 
 const sceneManager = useSceneManager();
-const suggestionsStore = useAISuggestions();
 
 function addFloor() {
 	const newLevel = sceneManager.hub.floors.length;
 	sceneManager.hub.floors.push({
 		level: newLevel,
-		type: "upper",
-		volume: 100,
+		type: "inflatable",
+		volume: 124,
 		acceptedItemTypes: [],
 		items: [],
 		modelUrl: "models/giriskati.glb",
 	});
 }
-
-const handleGenerateSuggestions = () => {
-	suggestionsStore.generateSuggestions(sceneManager.hub);
-};
 </script>
 
 <template>
@@ -46,15 +40,15 @@ const handleGenerateSuggestions = () => {
 					<ScrollArea class="h-full w-full bg-background p-4">
 						<div class="h-full w-full bg-background">
 							<div
-								class="text-lg font-semibold mb-2 text-foreground sticky top-0 w-full py-2 bg-background flex items-center justify-between"
+								class="text-lg font-semibold mb-2 text-foreground sticky top-0 w-full py-2 bg-background"
 							>
 								<h2 class="text-lg font-semibold text-foreground">
-									AI Suggestions
+									Specifications
 								</h2>
-								<Button size="sm" @click="handleGenerateSuggestions">
-									<Sparkles class="w-4 h-4" mr-1 />
-									Generate
-								</Button>
+								<p class="text-sm text-muted-foreground">
+									Specifications must meet the requirements of the mission
+									defined by NASA.
+								</p>
 							</div>
 
 							<AISuggestions />

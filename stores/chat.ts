@@ -5,6 +5,7 @@ export type ChatSession = {
 	id: string;
 	title?: string;
 	messages: UIMessage[];
+	appliedProposals?: Record<string, boolean>; // messageId-partIndex -> applied
 	createdAt: number;
 	updatedAt: number;
 };
@@ -17,6 +18,9 @@ export const useChatStore = defineStore(
 
 		// Current active chat ID ("new" for new chat, or actual chat ID)
 		const currentChatId = ref<string>("new");
+
+		// Pending message to be sent (for cross-component communication)
+		const pendingMessage = ref<string>("");
 
 		// Get current chat
 		const currentChat = computed(() => {
@@ -46,6 +50,7 @@ export const useChatStore = defineStore(
 			chats.value[chatId] = {
 				id: chatId,
 				messages: [],
+				appliedProposals: {},
 				createdAt: now,
 				updatedAt: now,
 			};
@@ -138,12 +143,43 @@ export const useChatStore = defineStore(
 			currentChatId.value = "new";
 		};
 
+		// Set pending message for cross-component communication
+		const setPendingMessage = (message: string) => {
+			pendingMessage.value = message;
+		};
+
+		// Mark a proposal as applied
+		const markProposalAsApplied = (messageId: string, partIndex: number) => {
+			if (currentChatId.value === "new") return;
+
+			const chat = chats.value[currentChatId.value];
+			if (chat) {
+				if (!chat.appliedProposals) {
+					chat.appliedProposals = {};
+				}
+				chat.appliedProposals[`${messageId}-${partIndex}`] = true;
+				chat.updatedAt = Date.now();
+			}
+		};
+
+		// Check if a proposal is applied
+		const isProposalApplied = (
+			messageId: string,
+			partIndex: number
+		): boolean => {
+			if (currentChatId.value === "new") return false;
+
+			const chat = chats.value[currentChatId.value];
+			return chat?.appliedProposals?.[`${messageId}-${partIndex}`] ?? false;
+		};
+
 		return {
 			chats,
 			currentChatId,
 			currentChat,
 			currentMessages,
 			chatList,
+			pendingMessage,
 			createChat,
 			setCurrentChat,
 			addMessage,
@@ -153,6 +189,9 @@ export const useChatStore = defineStore(
 			deleteChat,
 			clearCurrentChat,
 			clearAllChats,
+			setPendingMessage,
+			markProposalAsApplied,
+			isProposalApplied,
 		};
 	},
 	{

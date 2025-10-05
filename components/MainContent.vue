@@ -1,5 +1,10 @@
 <script setup lang="ts">
-import { Save, SquareArrowOutUpLeft } from "lucide-vue-next";
+import {
+	Save,
+	SquareArrowOutUpLeft,
+	AlertCircle,
+	AlertTriangle,
+} from "lucide-vue-next";
 import {
 	ResizablePanelGroup,
 	ResizablePanel,
@@ -9,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import Terminal from "./Terminal.vue";
 import { useSceneManager } from "@/stores/scene-manager";
 import { storeToRefs } from "pinia";
+import { useAISuggestions } from "@/stores/ai-suggestions";
 
 const key = ref(0);
 onMounted(() => (key.value = 1));
@@ -21,20 +27,14 @@ const sceneManager = useSceneManager();
 
 const { selectedFloor } = storeToRefs(sceneManager);
 
-function getPercentageColor(percentage: number) {
-	if (percentage > 75) return "text-red-500";
-	if (percentage > 40) return "text-yellow-500";
-	return "text-green-500";
-}
+const suggestionsStore = useAISuggestions();
 
-function getPercentageColorBackground(percentage: number) {
-	if (percentage > 75) return "bg-red-500";
-	if (percentage > 40) return "bg-yellow-500";
-	return "bg-green-500";
-}
+const errors = computed(() => {
+	return suggestionsStore.getErrors();
+});
 
-const floorVolume = computed(() => {
-	return sceneManager.calculateFloorVolumePercentage(selectedFloor.value);
+const warns = computed(() => {
+	return suggestionsStore.getWarns();
 });
 </script>
 
@@ -53,16 +53,40 @@ const floorVolume = computed(() => {
 								: `Level ${sceneManager.selectedFloor}`
 					}}
 				</span>
-				<div class="flex items-center space-x-2">
-					<span class="text-muted-foreground">Volume usage:</span>
-					<div
-						class="size-2 rounded-full"
-						:class="getPercentageColorBackground(floorVolume)"
-					/>
-					<span :class="getPercentageColor(floorVolume)"
-						>{{ floorVolume.toFixed(2) }}%</span
-					>
-				</div>
+				<TooltipProvider>
+					<div class="flex items-center space-x-4">
+						<Tooltip>
+							<TooltipTrigger as-child>
+								<span class="text-red-500 flex items-center gap-2"
+									><AlertCircle class="w-4 h-4" />
+									{{ errors.length }} Error(s)</span
+								>
+							</TooltipTrigger>
+							<TooltipContent>
+								<ol class="list-decimal pl-3">
+									<li v-for="error in errors" :key="error.id">
+										<span>{{ error.title }}</span>
+									</li>
+								</ol>
+							</TooltipContent>
+						</Tooltip>
+						<Tooltip>
+							<TooltipTrigger as-child>
+								<span class="text-yellow-500 flex items-center gap-2"
+									><AlertTriangle class="w-4 h-4" />
+									{{ warns.length }} Warning(s)</span
+								>
+							</TooltipTrigger>
+							<TooltipContent>
+								<ol class="list-decimal pl-3">
+									<li v-for="warn in warns" :key="warn.id">
+										<span>{{ warn.title }}</span>
+									</li>
+								</ol>
+							</TooltipContent>
+						</Tooltip>
+					</div>
+				</TooltipProvider>
 			</div>
 			<div class="flex items-center gap-2">
 				<div class="flex items-center gap-2">

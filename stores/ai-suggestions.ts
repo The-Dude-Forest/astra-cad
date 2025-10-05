@@ -18,9 +18,9 @@ export const useAISuggestions = defineStore(
 			{
 				id: "1",
 				type: "info",
-				title: "Optimal Floor Layout",
+				title: "Life Support Systems",
 				description:
-					"Your ground floor has a balanced distribution of lab and power facilities. Consider adding ventilation systems.",
+					"Your life support systems are positioned together. Ensure oxygen generators and CO2 scrubbers have redundancy for safety.",
 				timestamp: Date.now() - 3600000,
 			},
 			{
@@ -28,23 +28,23 @@ export const useAISuggestions = defineStore(
 				type: "warn",
 				title: "Volume Capacity Warning",
 				description:
-					"Ground floor is approaching 70% capacity (200/500). Plan for expansion or optimize space usage.",
+					"Ground floor is approaching 70% capacity. Consider optimizing space usage or planning additional modules.",
 				timestamp: Date.now() - 1800000,
 			},
 			{
 				id: "3",
 				type: "error",
-				title: "Safety Compliance Issue",
+				title: "Noise Level Warning",
 				description:
-					"Power Core and Fusion Lab are too close. Minimum distance of 20 units required for safety regulations.",
+					"High noise equipment detected near crew quarters. Life support systems should be isolated from sleeping areas.",
 				timestamp: Date.now() - 900000,
 			},
 			{
 				id: "4",
 				type: "info",
-				title: "Energy Efficiency",
+				title: "Power Distribution",
 				description:
-					"Current Power Core placement is optimal for distributing energy across all facilities.",
+					"Power battery placement is adequate for current load. Monitor high-consumption systems like thermal control and oxygen generation.",
 				timestamp: Date.now() - 600000,
 			},
 		]);
@@ -70,7 +70,7 @@ export const useAISuggestions = defineStore(
 						id: String(idCounter++),
 						type: "error",
 						title: `Floor ${floor.level}: Critical Capacity`,
-						description: `Floor is at ${capacityPercentage.toFixed(1)}% capacity (${totalVolume}/${floor.volume}). Immediate action required.`,
+						description: `Floor is at ${capacityPercentage.toFixed(1)}% capacity (${totalVolume.toFixed(1)}m³/${floor.volume}m³). Immediate action required.`,
 						timestamp: Date.now(),
 					});
 				} else if (capacityPercentage > 70) {
@@ -78,7 +78,7 @@ export const useAISuggestions = defineStore(
 						id: String(idCounter++),
 						type: "warn",
 						title: `Floor ${floor.level}: High Capacity`,
-						description: `Floor is at ${capacityPercentage.toFixed(1)}% capacity (${totalVolume}/${floor.volume}). Consider planning expansion.`,
+						description: `Floor is at ${capacityPercentage.toFixed(1)}% capacity (${totalVolume.toFixed(1)}m³/${floor.volume}m³). Consider planning expansion.`,
 						timestamp: Date.now(),
 					});
 				} else if (capacityPercentage > 0) {
@@ -86,47 +86,153 @@ export const useAISuggestions = defineStore(
 						id: String(idCounter++),
 						type: "info",
 						title: `Floor ${floor.level}: Good Capacity`,
-						description: `Floor is at ${capacityPercentage.toFixed(1)}% capacity (${totalVolume}/${floor.volume}). Space is well utilized.`,
+						description: `Floor is at ${capacityPercentage.toFixed(1)}% capacity (${totalVolume.toFixed(1)}m³/${floor.volume}m³). Space is well utilized.`,
 						timestamp: Date.now(),
 					});
 				}
 
-				// Check item proximity (simplified distance check)
-				for (let i = 0; i < floor.items.length; i++) {
-					for (let j = i + 1; j < floor.items.length; j++) {
-						const item1 = floor.items[i];
-						const item2 = floor.items[j];
+				// Calculate power consumption
+				const totalPower = floor.items.reduce(
+					(sum, item) => sum + (item.power || 0),
+					0
+				);
+
+				if (totalPower > 15) {
+					newSuggestions.push({
+						id: String(idCounter++),
+						type: "warn",
+						title: `High Power Consumption`,
+						description: `Total power consumption is ${totalPower.toFixed(1)} kW. Ensure battery and power generation systems can handle the load.`,
+						timestamp: Date.now(),
+					});
+				}
+
+				// Check for noisy equipment near crew quarters
+				const noisyItems = floor.items.filter((item) => (item.noise || 0) > 55);
+				const crewItems = floor.items.filter((item) => item.type === "crew");
+
+				noisyItems.forEach((noisy) => {
+					crewItems.forEach((crew) => {
 						const distance = Math.sqrt(
-							Math.pow(item1.x - item2.x, 2) +
-								Math.pow(item1.y - item2.y, 2) +
-								Math.pow(item1.z - item2.z, 2)
+							Math.pow(noisy.x - crew.x, 2) +
+								Math.pow(noisy.y - crew.y, 2) +
+								Math.pow(noisy.z - crew.z, 2)
 						);
 
-						if (
-							distance < 20 &&
-							(item1.type === "power" || item2.type === "power")
-						) {
+						if (distance < 8) {
 							newSuggestions.push({
 								id: String(idCounter++),
 								type: "error",
-								title: `Safety Distance Violation`,
-								description: `${item1.title} and ${item2.title} are only ${distance.toFixed(1)} units apart. Minimum safe distance is 20 units.`,
+								title: `Noise Pollution Alert`,
+								description: `${noisy.title} (${noisy.noise}dB) is only ${distance.toFixed(1)}m from ${crew.title}. Crew rest areas require acoustic isolation from machinery.`,
 								timestamp: Date.now(),
 							});
-						} else if (
-							distance < 15 &&
-							item1.type === "lab" &&
-							item2.type === "lab"
-						) {
+						} else if (distance < 12) {
 							newSuggestions.push({
 								id: String(idCounter++),
 								type: "warn",
-								title: `Lab Proximity Warning`,
-								description: `${item1.title} and ${item2.title} are ${distance.toFixed(1)} units apart. Consider more spacing for better workflow.`,
+								title: `Noise Level Concern`,
+								description: `${noisy.title} (${noisy.noise}dB) is ${distance.toFixed(1)}m from ${crew.title}. Consider increasing distance for better crew comfort.`,
 								timestamp: Date.now(),
 							});
 						}
-					}
+					});
+				});
+
+				// Check for life support system proximity to medical
+				const lifeSupportItems = floor.items.filter(
+					(item) => item.type === "life-support"
+				);
+				const medicalItems = floor.items.filter(
+					(item) => item.type === "medical"
+				);
+
+				if (lifeSupportItems.length > 0 && medicalItems.length > 0) {
+					lifeSupportItems.forEach((lifeSupport) => {
+						medicalItems.forEach((medical) => {
+							const distance = Math.sqrt(
+								Math.pow(lifeSupport.x - medical.x, 2) +
+									Math.pow(lifeSupport.y - medical.y, 2) +
+									Math.pow(lifeSupport.z - medical.z, 2)
+							);
+
+							if (distance > 15) {
+								newSuggestions.push({
+									id: String(idCounter++),
+									type: "info",
+									title: `Medical Bay Positioning`,
+									description: `${medical.title} is ${distance.toFixed(1)}m from ${lifeSupport.title}. Medical facilities should be accessible from all critical areas.`,
+									timestamp: Date.now(),
+								});
+							}
+						});
+					});
+				}
+
+				// Check airlock isolation
+				const airlockItems = floor.items.filter(
+					(item) => item.type === "airlock"
+				);
+				if (airlockItems.length > 0) {
+					const otherItems = floor.items.filter(
+						(item) => item.type !== "airlock"
+					);
+					airlockItems.forEach((airlock) => {
+						const tooClose = otherItems.filter((item) => {
+							const distance = Math.sqrt(
+								Math.pow(airlock.x - item.x, 2) +
+									Math.pow(airlock.y - item.y, 2) +
+									Math.pow(airlock.z - item.z, 2)
+							);
+							return distance < 3 && item.type !== "infrastructure";
+						});
+
+						if (tooClose.length > 2) {
+							newSuggestions.push({
+								id: String(idCounter++),
+								type: "warn",
+								title: `Airlock Congestion`,
+								description: `${airlock.title} has multiple items nearby. Airlock should be isolated during EVA operations for safety.`,
+								timestamp: Date.now(),
+							});
+						}
+					});
+				}
+
+				// Check heavy items for load distribution
+				const heavyItems = floor.items.filter((item) => (item.mass || 0) > 300);
+				if (heavyItems.length > 0) {
+					const heavyPositions = new Map<string, number>();
+					heavyItems.forEach((item) => {
+						const gridKey = `${Math.floor(item.x / 3)},${Math.floor(item.z / 3)}`;
+						heavyPositions.set(gridKey, (heavyPositions.get(gridKey) || 0) + 1);
+					});
+
+					heavyPositions.forEach((count, position) => {
+						if (count > 1) {
+							newSuggestions.push({
+								id: String(idCounter++),
+								type: "warn",
+								title: `Load Distribution Warning`,
+								description: `Multiple heavy items detected in same area (grid ${position}). Consider floor load distribution and structural support.`,
+								timestamp: Date.now(),
+							});
+						}
+					});
+				}
+
+				// Check for critical systems redundancy
+				const oxygenGenerators = floor.items.filter((item) =>
+					item.title.includes("Oxygen")
+				);
+				if (oxygenGenerators.length < 2) {
+					newSuggestions.push({
+						id: String(idCounter++),
+						type: "warn",
+						title: `Life Support Redundancy`,
+						description: `Only ${oxygenGenerators.length} oxygen generation system detected. Critical life support systems should have redundancy.`,
+						timestamp: Date.now(),
+					});
 				}
 
 				// Check type compliance
@@ -154,12 +260,78 @@ export const useAISuggestions = defineStore(
 				id: String(idCounter++),
 				type: "info",
 				title: "Hub Overview",
-				description: `Your hub "${hub.title}" has ${totalFloors} floor${totalFloors !== 1 ? "s" : ""} with ${totalItems} item${totalItems !== 1 ? "s" : ""} total.`,
+				description: `Lunar base "${hub.title}" has ${totalFloors} module${totalFloors !== 1 ? "s" : ""} with ${totalItems} item${totalItems !== 1 ? "s" : ""} total.`,
 				timestamp: Date.now(),
 			});
 
+			// Check for essential systems presence
+			const hasCommand = hub.floors.some((f) =>
+				f.items.some((i) => i.type === "command")
+			);
+			const hasLifeSupport = hub.floors.some((f) =>
+				f.items.some((i) => i.type === "life-support")
+			);
+			const hasCrew = hub.floors.some((f) =>
+				f.items.some((i) => i.type === "crew")
+			);
+			const hasMedical = hub.floors.some((f) =>
+				f.items.some((i) => i.type === "medical")
+			);
+
+			if (!hasCommand) {
+				newSuggestions.push({
+					id: String(idCounter++),
+					type: "error",
+					title: "Missing Command Systems",
+					description:
+						"No command/control systems detected. Base requires operational command center.",
+					timestamp: Date.now(),
+				});
+			}
+
+			if (!hasLifeSupport) {
+				newSuggestions.push({
+					id: String(idCounter++),
+					type: "error",
+					title: "Missing Life Support",
+					description:
+						"No life support systems detected. Critical for crew survival.",
+					timestamp: Date.now(),
+				});
+			}
+
+			if (!hasCrew && hasCommand) {
+				newSuggestions.push({
+					id: String(idCounter++),
+					type: "warn",
+					title: "No Crew Quarters",
+					description:
+						"No crew quarters detected. Add sleeping pods and personal storage for crew well-being.",
+					timestamp: Date.now(),
+				});
+			}
+
+			if (!hasMedical) {
+				newSuggestions.push({
+					id: String(idCounter++),
+					type: "warn",
+					title: "No Medical Facilities",
+					description:
+						"No medical bay detected. Medical facilities are essential for crew health and emergencies.",
+					timestamp: Date.now(),
+				});
+			}
+
 			// Replace all suggestions with new ones
 			suggestions.value = newSuggestions;
+		};
+
+		const getErrors = () => {
+			return suggestions.value.filter((s) => s.type === "error");
+		};
+
+		const getWarns = () => {
+			return suggestions.value.filter((s) => s.type === "warn");
 		};
 
 		const clearSuggestions = () => {
@@ -175,6 +347,8 @@ export const useAISuggestions = defineStore(
 			generateSuggestions,
 			clearSuggestions,
 			removeSuggestion,
+			getErrors,
+			getWarns,
 		};
 	},
 	{

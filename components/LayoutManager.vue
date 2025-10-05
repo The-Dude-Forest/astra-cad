@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, watch, computed } from "vue";
-import { useSceneManager } from "@/stores/scene-manager";
+import { useSceneManager, FloorTypes } from "@/stores/scene-manager";
+import type { FloorType } from "@/stores/scene-manager";
 import {
 	Accordion,
 	AccordionContent,
@@ -12,10 +13,19 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
 import { Layers, Package, Plus, Trash2 } from "lucide-vue-next";
 import Textarea from "./ui/textarea/Textarea.vue";
+import { useAISuggestions } from "@/stores/ai-suggestions";
 
 const sceneManager = useSceneManager();
+const suggestionsStore = useAISuggestions();
 
 const accordionValue = ref(
 	sceneManager.selectedFloor >= 0
@@ -49,11 +59,13 @@ watch(
 	}
 );
 
-function updateFloorType(floorLevel: number, value: string) {
+function updateFloorType(floorLevel: number, value: FloorType) {
 	const floor = sceneManager.hub.floors.find((f) => f.level === floorLevel);
 	if (floor) {
 		floor.type = value;
 	}
+
+	suggestionsStore.generateSuggestions(sceneManager.hub);
 }
 
 function updateFloorVolume(floorLevel: number, value: number) {
@@ -61,6 +73,8 @@ function updateFloorVolume(floorLevel: number, value: number) {
 	if (floor) {
 		floor.volume = value;
 	}
+
+	suggestionsStore.generateSuggestions(sceneManager.hub);
 }
 
 function removeItem(floorLevel: number, itemIndex: number) {
@@ -68,6 +82,8 @@ function removeItem(floorLevel: number, itemIndex: number) {
 	if (floor) {
 		floor.items.splice(itemIndex, 1);
 	}
+
+	suggestionsStore.generateSuggestions(sceneManager.hub);
 }
 
 function removeFloor(floorLevel: number) {
@@ -84,6 +100,8 @@ function removeFloor(floorLevel: number) {
 				sceneManager.selectedFloor = sceneManager.hub.floors.length - 1;
 			}
 		}
+
+		suggestionsStore.generateSuggestions(sceneManager.hub);
 	}
 }
 </script>
@@ -121,11 +139,25 @@ function removeFloor(floorLevel: number) {
 							<div class="grid grid-cols-2 gap-3">
 								<div class="space-y-2">
 									<Label>Type</Label>
-									<Input
-										:value="floor.type"
-										@input="updateFloorType(floor.level, $event.target.value)"
-										placeholder="Floor type"
-									/>
+									<Select
+										:model-value="floor.type"
+										@update:model-value="
+											(value: FloorType) => updateFloorType(floor.level, value)
+										"
+									>
+										<SelectTrigger class="w-full">
+											<SelectValue placeholder="Select floor type" />
+										</SelectTrigger>
+										<SelectContent>
+											<SelectItem
+												v-for="floorType in FloorTypes"
+												:key="floorType"
+												:value="floorType"
+											>
+												{{ floorType }}
+											</SelectItem>
+										</SelectContent>
+									</Select>
 								</div>
 								<div class="space-y-2">
 									<Label>Volume</Label>
@@ -139,6 +171,7 @@ function removeFloor(floorLevel: number) {
 										"
 										type="number"
 										placeholder="Volume"
+										disabled
 									/>
 								</div>
 							</div>

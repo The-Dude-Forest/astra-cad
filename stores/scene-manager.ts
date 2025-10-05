@@ -24,7 +24,8 @@ export const ItemTypes = [
 	"infrastructure",
 ] as const;
 
-type FloorType = "ground" | "upper" | "sub" | string;
+export const FloorTypes = ["inflatable", "metallic", "hybrid"] as const;
+export type FloorType = (typeof FloorTypes)[number];
 
 export type Item = {
 	title: string;
@@ -741,7 +742,7 @@ export const useSceneManager = defineStore(
 				{
 					level: 0,
 					modelUrl: "models/lunar_base_main.glb",
-					type: "ground",
+					type: "inflatable",
 					volume: 500,
 					acceptedItemTypes: [
 						"command",

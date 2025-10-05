@@ -6,10 +6,7 @@
 					<template v-if="chatStore.currentChat?.title">
 						{{ chatStore.currentChat.title }}
 					</template>
-					<template v-else-if="chatStore.currentChatId !== 'new' && isLoading">
-						<span class="text-muted-foreground">Generating title...</span>
-					</template>
-					<template v-else> New Chat </template>
+					<template v-else> AI Assistant </template>
 				</h2>
 				<span
 					v-if="chatStore.currentChatId !== 'new'"
@@ -47,14 +44,154 @@
 				</div>
 
 				<!-- Assistant Message (Full Width) -->
-				<div v-else-if="message.role === 'assistant'" class="w-full">
-					<div class="w-full overflow-x-hidden">
-						<p
-							class="text-sm leading-relaxed whitespace-pre-wrap break-words max-w-full text-foreground"
+				<div v-else-if="message.role === 'assistant'" class="w-full space-y-2">
+					<!-- Render parts in order -->
+					<template v-for="(part, partIndex) in message.parts" :key="partIndex">
+						<!-- Text parts -->
+						<div
+							v-if="part.type === 'text' && part.text"
+							class="w-full overflow-x-hidden"
 						>
-							{{ getTextFromMessage(message) }}
-						</p>
-					</div>
+							<p
+								class="text-sm leading-relaxed whitespace-pre-wrap break-words max-w-full text-foreground"
+							>
+								{{ part.text }}
+							</p>
+						</div>
+
+						<!-- Tool call parts -->
+						<Accordion
+							v-else-if="part.type.startsWith('tool-')"
+							type="multiple"
+							class="w-full"
+							:disabled="
+								isProposedChanges(part) &&
+								chatStore.isProposalApplied(message.id, partIndex)
+							"
+						>
+							<AccordionItem
+								:value="`tool-${partIndex}`"
+								:class="[
+									'rounded-lg overflow-hidden border-b-0',
+									isProposedChanges(part) &&
+									chatStore.isProposalApplied(message.id, partIndex)
+										? 'bg-green-500/5 border border-green-500/10 opacity-60'
+										: isProposedChanges(part)
+											? 'bg-green-500/10 border border-green-500/20'
+											: 'bg-primary/10 border border-primary/20',
+								]"
+							>
+								<AccordionTrigger
+									:class="[
+										'px-3 py-2 hover:no-underline transition-colors',
+										chatStore.isProposalApplied(message.id, partIndex)
+											? 'cursor-default'
+											: isProposedChanges(part)
+												? 'hover:bg-green-500/10 [&[data-state=open]]:bg-green-500/10'
+												: 'hover:bg-blue-500/10 [&[data-state=open]]:bg-blue-500/10',
+									]"
+								>
+									<div
+										class="flex items-center gap-2 text-xs w-full justify-between"
+									>
+										<span
+											:class="[
+												'font-medium',
+												isProposedChanges(part)
+													? 'text-green-600 dark:text-green-400'
+													: 'text-primary',
+											]"
+										>
+											{{
+												chatStore.isProposalApplied(message.id, partIndex)
+													? "✓ Changes Applied"
+													: isProposedChanges(part)
+														? "✨ Proposed Changes"
+														: `🔧 Tool call: ${part.type.split("-")[1] || part.toolCallId}`
+											}}
+										</span>
+										<span
+											v-if="chatStore.isProposalApplied(message.id, partIndex)"
+											class="text-xs text-green-600 dark:text-green-400"
+										>
+											Applied
+										</span>
+									</div>
+								</AccordionTrigger>
+								<AccordionContent class="px-3 pb-3 pt-0">
+									<div v-if="isProposedChanges(part)" class="space-y-3">
+										<div class="bg-muted/30 rounded p-3 space-y-2">
+											<p class="text-sm text-foreground">
+												{{ getProposedChangesData(part).explanation }}
+											</p>
+											<div class="space-y-2">
+												<div
+													v-for="(change, idx) in getProposedChangesData(part)
+														.changes"
+													:key="idx"
+													class="bg-background/50 rounded p-2 text-xs"
+												>
+													<div class="font-medium text-foreground mb-1">
+														{{ idx + 1 }}. {{ change.action.toUpperCase() }}:
+														{{ change.itemTitle }}
+													</div>
+													<div class="text-muted-foreground">
+														{{ change.reason }}
+													</div>
+													<div
+														v-if="change.newPosition"
+														class="text-muted-foreground mt-1"
+													>
+														Position: ({{ change.newPosition.x }},
+														{{ change.newPosition.y }},
+														{{ change.newPosition.z }})
+													</div>
+												</div>
+											</div>
+										</div>
+										<Button
+											v-if="!chatStore.isProposalApplied(message.id, partIndex)"
+											size="sm"
+											class="w-full"
+											@click="
+												applyProposedChanges(
+													message.id,
+													partIndex,
+													getProposedChangesData(part)
+												)
+											"
+										>
+											<WandSparkles class="w-4 h-4 mr-1" /> Apply Changes
+										</Button>
+										<div
+											v-else
+											class="text-center text-sm text-green-600 dark:text-green-400 py-2"
+										>
+											✓ Changes have been applied to your layout
+										</div>
+									</div>
+
+									<!-- Regular tool output -->
+									<div v-else class="bg-muted/30 rounded p-2">
+										<code
+											class="text-xs whitespace-pre-wrap break-words max-w-full text-muted-foreground block font-mono"
+										>
+											{{
+												JSON.stringify(
+													part.output.summary ||
+														part.output ||
+														part.result ||
+														part,
+													null,
+													2
+												)
+											}}
+										</code>
+									</div>
+								</AccordionContent>
+							</AccordionItem>
+						</Accordion>
+					</template>
 				</div>
 			</div>
 
@@ -118,14 +255,24 @@
 <script setup>
 import { ref, computed, nextTick, onMounted, watch } from "vue";
 import Button from "./ui/button/Button.vue";
-import { Send, Loader2 } from "lucide-vue-next";
+import { Send, Loader2, WandSparkles } from "lucide-vue-next";
 import { Chat } from "@ai-sdk/vue";
 import { DefaultChatTransport } from "ai";
 import { useChatStore } from "../stores/chat";
+import { useAISuggestions } from "../stores/ai-suggestions";
+import { useSceneManager } from "../stores/scene-manager";
+import {
+	Accordion,
+	AccordionContent,
+	AccordionItem,
+	AccordionTrigger,
+} from "./ui/accordion";
 
 const input = ref("");
 const messagesContainer = ref(null);
 const chatStore = useChatStore();
+const suggestionsStore = useAISuggestions();
+const sceneStore = useSceneManager();
 
 // Initialize Chat with AI SDK, loading messages from current chat
 const chat = new Chat({
@@ -136,17 +283,18 @@ const chat = new Chat({
 			get isNewChat() {
 				return chatStore.currentChatId === "new";
 			},
+			get suggestions() {
+				return suggestionsStore.suggestions;
+			},
+			get availableItems() {
+				return sceneStore.items;
+			},
+			get hub() {
+				return sceneStore.hub;
+			},
 		},
 	}),
-	onData: (dataPart) => {
-		// Handle title generation
-		if (dataPart.type === "data-chat-title") {
-			const title = dataPart.data.title;
-			if (chatStore.currentChatId !== "new" && chatStore.currentChat && title) {
-				chatStore.updateChatTitle(chatStore.currentChatId, title);
-			}
-		}
-	},
+	onData: (_dataPart) => {},
 	onError(error) {
 		console.error("Chat error:", error);
 	},
@@ -173,6 +321,93 @@ const getTextFromMessage = (message) => {
 		.filter((part) => part.type === "text")
 		.map((part) => part.text)
 		.join("");
+};
+
+// Check if a tool part is proposedLayoutChanges
+const isProposedChanges = (part) => {
+	return (
+		part.toolCallId === "proposeLayoutChanges" ||
+		part.toolName === "proposeLayoutChanges" ||
+		(part.output && part.output.changes && Array.isArray(part.output.changes))
+	);
+};
+
+// Get proposed changes data from tool part
+const getProposedChangesData = (part) => {
+	return part.output || part.result || {};
+};
+
+// Apply proposed changes to the scene
+const applyProposedChanges = (messageId, partIndex, data) => {
+	if (!data.changes || data.changes.length === 0) {
+		console.error("No changes to apply");
+		return;
+	}
+
+	const confirmMsg = `Apply ${data.changes.length} change(s) to your lunar base?\n\n${data.explanation}`;
+	if (!confirm(confirmMsg)) return;
+
+	try {
+		data.changes.forEach((change) => {
+			const floor = sceneStore.hub.floors.find(
+				(f) => f.level === change.floorLevel
+			);
+			if (!floor) {
+				console.warn(`Floor ${change.floorLevel} not found`);
+				return;
+			}
+
+			switch (change.action) {
+				case "move": {
+					const item = floor.items.find((i) => i.title === change.itemTitle);
+					if (item && change.newPosition) {
+						item.x = change.newPosition.x;
+						item.y = change.newPosition.y;
+						item.z = change.newPosition.z;
+					}
+					break;
+				}
+				case "remove": {
+					const index = floor.items.findIndex(
+						(i) => i.title === change.itemTitle
+					);
+					if (index !== -1) {
+						floor.items.splice(index, 1);
+					}
+					break;
+				}
+				case "add": {
+					const templateItem = sceneStore.items.find(
+						(i) => i.title === change.itemTitle
+					);
+					if (templateItem && change.newPosition) {
+						floor.items.push({
+							...templateItem,
+							x: change.newPosition.x,
+							y: change.newPosition.y,
+							z: change.newPosition.z,
+						});
+					}
+					break;
+				}
+				case "modify": {
+					const item = floor.items.find((i) => i.title === change.itemTitle);
+					if (item && change.newPosition) {
+						item.x = change.newPosition.x;
+						item.y = change.newPosition.y;
+						item.z = change.newPosition.z;
+					}
+					break;
+				}
+			}
+		});
+
+		// Mark proposal as applied in chat store
+		chatStore.markProposalAsApplied(messageId, partIndex);
+	} catch (error) {
+		console.error("Error applying changes:", error);
+		alert("Failed to apply changes. Check console for details.");
+	}
 };
 
 // Scroll to bottom when new messages arrive
@@ -238,6 +473,30 @@ watch(input, () => {
 		autoResizeTextarea(textarea);
 	}
 });
+
+// Watch for pending messages from other components
+watch(
+	() => chatStore.pendingMessage,
+	(newMessage) => {
+		if (newMessage) {
+			// Create a new chat and send the message
+			chatStore.setCurrentChat("new");
+			input.value = newMessage;
+			chatStore.setPendingMessage(""); // Clear after using
+
+			// Auto-submit the message
+			nextTick(() => {
+				if (!isLoading.value) {
+					chat.sendMessage({
+						text: input.value,
+					});
+					input.value = "";
+					scrollToBottom();
+				}
+			});
+		}
+	}
+);
 
 onMounted(() => {
 	scrollToBottom();

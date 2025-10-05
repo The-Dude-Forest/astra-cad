@@ -69,6 +69,7 @@
 import { useSceneManager, ItemTypes, type Item } from "@/stores/scene-manager";
 import { storeToRefs } from "pinia";
 import { Search } from "lucide-vue-next";
+import { useAISuggestions } from "@/stores/ai-suggestions";
 
 const itemsFiltered = computed(() =>
 	items.value.filter(
@@ -82,11 +83,14 @@ const search = ref("");
 
 const sceneManager = useSceneManager();
 const filterSearch = ref("all");
+const suggestionsStore = useAISuggestions();
 
 const handleItemSelection = (item: Item) => {
 	hub.value.floors
 		.find((e) => e.level === selectedFloor.value)
 		?.items.push(item);
+
+	suggestionsStore.generateSuggestions(hub.value);
 };
 
 const { hub, selectedFloor, items, selectedItem } = storeToRefs(sceneManager);

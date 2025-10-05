@@ -1,19 +1,23 @@
 <script setup lang="ts">
-import type { SuggestionType } from "@/stores/ai-suggestions";
+import { type Suggestion, type SuggestionType } from "@/stores/ai-suggestions";
 import {
 	Collapsible,
 	CollapsibleTrigger,
 	CollapsibleContent,
 } from "@/components/ui/collapsible";
+import { Button } from "@/components/ui/button";
 import { useAISuggestions } from "@/stores/ai-suggestions";
+import { useChatStore } from "@/stores/chat";
 import {
 	Info,
 	AlertTriangle,
 	AlertCircle,
 	ChevronRight,
+	Sparkles,
 } from "lucide-vue-next";
 
 const suggestionsStore = useAISuggestions();
+const chatStore = useChatStore();
 
 const sortedSuggestions = computed(() => {
 	const priorityOrder = { error: 0, warn: 1, info: 2 };
@@ -42,6 +46,11 @@ const getSuggestionColor = (type: SuggestionType) => {
 		case "error":
 			return "text-red-500";
 	}
+};
+
+const fixWithAI = (suggestion: Suggestion) => {
+	const message = `How can I fix my '${suggestion.title}' problem? Details: ${suggestion.description}`;
+	chatStore.setPendingMessage(message);
 };
 </script>
 
@@ -81,6 +90,14 @@ const getSuggestionColor = (type: SuggestionType) => {
 						{{ suggestion.description }}
 					</p>
 				</div>
+				<Button
+					v-if="suggestion.type === 'error' || suggestion.type === 'warn'"
+					class="ml-11 mb-4 mt-2"
+					@click="fixWithAI(suggestion)"
+				>
+					<Sparkles class="w-4 h-4 mr-1" />
+					Fix with AI
+				</Button>
 			</CollapsibleContent>
 		</Collapsible>
 
